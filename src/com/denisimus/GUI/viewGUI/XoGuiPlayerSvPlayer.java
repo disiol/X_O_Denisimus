@@ -1,6 +1,7 @@
 package com.denisimus.GUI.viewGUI;
 
 import com.denisimus.CLI.modelCLI.Figure;
+import com.denisimus.CLI.modelCLI.Filed;
 import com.denisimus.CLI.modelCLI.Player;
 import com.denisimus.CLI.modelCLI.exeptions.InvalidPointException;
 import com.denisimus.GUI.modelGUI.FiledGUI;
@@ -102,7 +103,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         JButton theButton = (JButton) e.getSource();
         // Кнопка New Game
         if (theButton == newGameButton) {
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i <filed.getSize() ; i++) {
                 squares[i].setEnabled(true);
                 squares[i].setText("");
                 squares[i].setBackground(Color.green);
@@ -116,7 +117,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         }
 
         // Одна из клеток
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < filed.getSize(); i++) {
 
             if (theButton == squares[i]) {
 
