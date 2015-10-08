@@ -100,7 +100,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         GuiView guiView = new GuiView();
-
+        newGameButton.setEnabled(false);
         JButton theButton = (JButton) e.getSource();
         // Кнопка New Game
         if (theButton == newGameButton) {
@@ -111,10 +111,9 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
             }
 
-            emptySquaresLeft = 9;
             score.setText("Player move: " + players[0].getName() + " figure: " + players[0].getFigure());
             newGameButton.setEnabled(true);
-            return;
+
         }
 
         // Одна из клеток
@@ -125,7 +124,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
                 try {
                     if (guiView.move(gameXO, players, i) == true) {
-                        squares[i].setText(filed.getFigure(i));
+                        squares[i].setText(String.valueOf(filed.getFigure(i)));
 
                         score.setText("Player move: " + guiView.playerName(players, filed.getFigure(i)) + " figure: "
                                 + guiView);
@@ -134,7 +133,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
                         //winner = lookForWinner();
                     }
-                } catch (InvalidPointException | AlreadyOccupantException ei) {
+                } catch (InvalidPointException ei) {
                     ei.printStackTrace();
                 }
 
