@@ -33,7 +33,7 @@ public class FiledGUI {
 
     }
 
-    public void setFigure(final int point, final Figure figure) throws InvalidPointException {
+    public void setFigure(final int point, final Figure figure) {
 
 //        if (!checkPoint(point)) {        return filed[point][];
 

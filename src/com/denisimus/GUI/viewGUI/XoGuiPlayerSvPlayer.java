@@ -3,6 +3,7 @@ package com.denisimus.GUI.viewGUI;
 import com.denisimus.CLI.modelCLI.Figure;
 import com.denisimus.CLI.modelCLI.Filed;
 import com.denisimus.CLI.modelCLI.Player;
+import com.denisimus.CLI.modelCLI.exeptions.AlreadyOccupantException;
 import com.denisimus.CLI.modelCLI.exeptions.InvalidPointException;
 import com.denisimus.GUI.modelGUI.FiledGUI;
 import com.denisimus.GUI.modelGUI.GameGUI;
@@ -99,7 +100,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         GuiView guiView = new GuiView();
-        Figure figure;
+
         JButton theButton = (JButton) e.getSource();
         // Кнопка New Game
         if (theButton == newGameButton) {
@@ -121,27 +122,21 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
             if (theButton == squares[i]) {
 
+
                 try {
                     if (guiView.move(gameXO, players, i) == true) {
+                        squares[i].setText(filed.getFigure(i));
+
                         score.setText("Player move: " + guiView.playerName(players, filed.getFigure(i)) + " figure: "
                                 + guiView);
                         squares[i].setFont(new Font("TimesRoman", 0, 36));
 
-                        squares[i].setText(String.valueOf(filed.getFigure(i)));
-
 
                         //winner = lookForWinner();
                     }
-                } catch (InvalidPointException e1) {
-                    e1.printStackTrace();
+                } catch (InvalidPointException | AlreadyOccupantException ei) {
+                    ei.printStackTrace();
                 }
-
-//        GuiView show = new GuiView(gameXO);
-//        while (GuiView(gameXO, players) {
-//            System.out.println();
-//           GuiView.show(gameXO);
-//            System.out.println();
-//        }
 
 
             }
