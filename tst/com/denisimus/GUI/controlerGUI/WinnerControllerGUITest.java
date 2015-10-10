@@ -65,7 +65,7 @@ public class WinnerControllerGUITest {
             filed.setFigure(3, Figure.X);
             filed.setFigure(4, Figure.X);
             filed.setFigure(5, Figure.X);
-            assertNull(winnerController.getWinner(filed));
+        assertEquals(Figure.X, winnerController.getWinner(filed));
 
 
     }
@@ -187,7 +187,7 @@ public class WinnerControllerGUITest {
 
         final WinnerControllerGUI winnerController = new WinnerControllerGUI();
 
-        final FiledGUI filed = new FiledGUI(3);
+        final FiledGUI filed = new FiledGUI(9);
         filed.setFigure(2, Figure.X);
         filed.setFigure(4, Figure.X);
         filed.setFigure(6, Figure.X);
@@ -201,7 +201,7 @@ public class WinnerControllerGUITest {
 
         final WinnerControllerGUI winnerController = new WinnerControllerGUI();
 
-        final FiledGUI filed = new FiledGUI(3);
+        final FiledGUI filed = new FiledGUI(9);
         filed.setFigure(2, Figure.X);
         filed.setFigure(4, Figure.X);
         filed.setFigure(6, Figure.O);
