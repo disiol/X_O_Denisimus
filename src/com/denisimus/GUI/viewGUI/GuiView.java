@@ -25,54 +25,51 @@ public class GuiView {
     private final MoveControllerGUI moveControllerGUI = new MoveControllerGUI();
 
 
-    public void show(final GameGUI gameGUI) {
-        System.out.printf("Game name: %s\n", gameGUI.getName());
-        final FiledGUI filedGUI = gameGUI.getFiled();
-
-
-    }
-
-    public boolean move(final GameGUI gameGUI, Player[] players, int point) throws InvalidPointException {
-        final FiledGUI filedGUI = gameGUI.getFiled();
-        final Figure winner = winnerControllerGUI.getWinner(filedGUI);
-        if (winner != null) {
-
-            System.out.println();
-            System.out.printf("Winner is player: %s, Figure: %s\n", playerName(players, winner));
-
-            return false;
-        }
-        final Figure currentFigure = currentMoveControllerGUI.currentMove(filedGUI);
-        if (currentFigure == null) {
-            if (winner == null) {
-                System.out.println("No winner and no moves left");
-                return false;
-            }
-
-        }
-        System.out.printf("Player move: %s, figure: %s\nPlease enter move point \n", playerName(players, currentFigure), currentFigure);
-        //final Point point = askPoint();
-        try {
-            moveControllerGUI.applyFigure(filedGUI, point, currentFigure);
-        } catch (InvalidPointException | AlreadyOccupantException e) {
-            System.out.println("Point is invalid");
-        }
-       return true;
-    }
-
-    protected String playerName(Player[] players, Figure input) {
-        final Player[] player = new GameGUI(players, null, null).getPlayers();
-
-        if (input == Figure.X) {
-            return player[0].getName();
-
-        }
-        if (input == Figure.O) {
-            return player[1].getName();
-        }
-
-        return null;
-    }
+//    public void show(final GameGUI gameGUI) {
+//        System.out.printf("Game name: %s\n", gameGUI.getName());
+//        final FiledGUI filedGUI = gameGUI.getFiled();
+//
+//
+//    }
+//
+//    public boolean move(final GameGUI gameGUI, Player[] players, int point)  {
+//        final FiledGUI filedGUI = gameGUI.getFiled();
+//        final Figure winner = winnerControllerGUI.getWinner(filedGUI);
+//        if (winner != null) {
+//
+//            return false;
+//        }
+//        final Figure currentFigure = currentMoveControllerGUI.currentMove(filedGUI);
+//        if (currentFigure == null) {
+//            if (winner == null) {
+//                System.out.println("No winner and no moves left");
+//                return false;
+//            }
+//
+//        }
+//        System.out.printf("Player move: %s, figure: %s\nPlease enter move point \n", playerName(players, currentFigure), currentFigure);
+//        //final Point point = askPoint();
+//        try {
+//            moveControllerGUI.applyFigure(filedGUI, point, currentFigure);
+//        } catch (InvalidPointException | AlreadyOccupantException e) {
+//            System.out.println("Point is invalid");
+//        }
+//       return true;
+//    }
+//
+//    protected String playerName(Player[] players, Figure input) {
+//        final Player[] player = new GameGUI(players, null, null).getPlayers();
+//
+//        if (input == Figure.X) {
+//            return player[0].getName();
+//
+//        }
+//        if (input == Figure.O) {
+//            return player[1].getName();
+//        }
+//
+//        return null;
+//    }
 //    private Point askPoint() {
 //        return new Point(askCoordinate("X") - 1, askCoordinate("Y") - 1);
 //    }
@@ -90,6 +87,7 @@ public class GuiView {
 //        }
 //
 //    }
+
 //    private void printLine(final FiledGUI filed,
 //                           final int x) {
 //

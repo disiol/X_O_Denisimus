@@ -18,13 +18,9 @@ public class MoveControllerGUI {
 
     public void applyFigure(FiledGUI filedGUI,
                             int point,
-                            Figure figure)throws InvalidPointException,
-    AlreadyOccupantException{
+                            Figure figure) {
 
 
-        if (filedGUI.getFigure(point) != null) {
-            throw new AlreadyOccupantException();
-        }
 
         filedGUI.setFigure(point, figure);
 

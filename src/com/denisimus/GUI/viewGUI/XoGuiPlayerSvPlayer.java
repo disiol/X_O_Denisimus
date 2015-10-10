@@ -1,10 +1,10 @@
 package com.denisimus.GUI.viewGUI;
 
 import com.denisimus.CLI.modelCLI.Figure;
-import com.denisimus.CLI.modelCLI.Filed;
 import com.denisimus.CLI.modelCLI.Player;
-import com.denisimus.CLI.modelCLI.exeptions.AlreadyOccupantException;
-import com.denisimus.CLI.modelCLI.exeptions.InvalidPointException;
+import com.denisimus.GUI.controlerGUI.CurrentMoveControllerGUI;
+import com.denisimus.GUI.controlerGUI.MoveControllerGUI;
+import com.denisimus.GUI.controlerGUI.WinnerControllerGUI;
 import com.denisimus.GUI.modelGUI.FiledGUI;
 import com.denisimus.GUI.modelGUI.GameGUI;
 
@@ -20,7 +20,9 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
     final Player[] players = new Player[2];
     final GameGUI gameXO = new GameGUI(players, new FiledGUI(9), "XO");
     final FiledGUI filed = gameXO.getFiled();
-
+    private final CurrentMoveControllerGUI currentMoveControllerGUI = new CurrentMoveControllerGUI();
+    private final WinnerControllerGUI winnerControllerGUI = new WinnerControllerGUI();
+    private final MoveControllerGUI moveControllerGUI = new MoveControllerGUI();
     JButton squares[];
     JButton newGameButton;
     JLabel score = new JLabel("Puth the new game button");
@@ -28,7 +30,10 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
     JLabel plaeyr2Name = new JLabel("plaeyr2Name");
     int plaeyr1Win = 0;
     int plaeyr2Win = 0;
-    int emptySquaresLeft = 9;
+    Figure winnerFigure = null;
+
+    //private Figure figure;
+
 
     public void setGuiXO(String plaeyr1, String plaeyr2) {
 
@@ -44,10 +49,6 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         final GameGUI gameXO = new GameGUI(players, new FiledGUI(9), "XO");
 
 
-//        System.out.println();
-//        System.out.printf("%s Figure: %s\n", players[0].getName(), players[0].getFigure());
-//        System.out.printf("%s Figure: %s \n", players[1].getName(), players[1].getFigure());
-//        System.out.println();
         JFrame frame = new JFrame("Game name: " + gameXO.getName());
         final Player[] plaeyrs = gameXO.getPlayers();
 
@@ -63,7 +64,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         // Кнопка “New Game” и слушатель действия
         plaeyr1Name = new JLabel(plaeyrs[0].getName() + " : " + plaeyr1Win);
         plaeyr2Name = new JLabel(plaeyrs[1].getName() + " : " + plaeyr2Win);
-        newGameButton = new JButton("new game");
+        newGameButton = new JButton("New game");
         newGameButton.addActionListener(this);
 
         Panel topPanel = new Panel();
@@ -83,7 +84,6 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
         // Кнопки
         for (int i = 0; i < filed.getSize(); i++) {
-            boolean b = false;
             squares[i] = new JButton();
             squares[i].addActionListener(this);
             squares[i].setBackground(Color.green);
@@ -99,49 +99,145 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        GuiView guiView = new GuiView();
-        newGameButton.setEnabled(false);
+
+
         JButton theButton = (JButton) e.getSource();
         // Кнопка New Game
-        if (theButton == newGameButton) {
-            for (int i = 0; i <filed.getSize() ; i++) {
+        if (theButton.equals(newGameButton)) {
+            for (int i = 0; i < filed.getSize(); i++) {
                 squares[i].setEnabled(true);
                 squares[i].setText("");
                 squares[i].setBackground(Color.green);
-
+                score.setText("move player : " + players[0].getName() + " figure: X");
             }
 
-            score.setText("Player move: " + players[0].getName() + " figure: " + players[0].getFigure());
+            //  Figure figure = Figure.X;
+            //   score.setText("move player : " + playerName(players, figure));
             newGameButton.setEnabled(true);
-
+            return;
         }
 
+        boolean winner = true;
         // Одна из клеток
+        metka:
+
         for (int i = 0; i < filed.getSize(); i++) {
 
             if (theButton == squares[i]) {
+                boolean lookForWinner = lookForWinner(gameXO, players, i);
 
 
-                try {
-                    if (guiView.move(gameXO, players, i) == true) {
-                        squares[i].setText(String.valueOf(filed.getFigure(i)));
+                if (lookForWinner == true) {
+                    //final Figure currentFigure = currentMoveControllerGUI.currentMove(filed);
 
-                        score.setText("Player move: " + guiView.playerName(players, filed.getFigure(i)) + " figure: "
-                                + guiView);
-                        squares[i].setFont(new Font("TimesRoman", 0, 36));
+                    squares[i].setText(filed.getFigure(i).toString());
+                    squares[i].setFont(new Font("TimesRoman", 0, 36));
+                    score.setText("Player move: " + playerName(players, Figure.X));
 
 
-                        //winner = lookForWinner();
-                    }
-                } catch (InvalidPointException ei) {
-                    ei.printStackTrace();
+                    winner = lookForWinner;
+
+                } else {
+                    continue metka;
                 }
 
+                if (winner == false) {
+                    endTheGame();
 
+                }
+                break;
             }
 
 
         }
+
+//
+//        Figure currentFigure = currentMoveControllerGUI.currentMove(filed);
+//        final Figure figure = new CurrentMoveControllerGUI().currentMove(filed);
+//
+//
+//        if (figure.equals("X")) {
+//            ++plaeyr1Win;
+//            //labWin.setText("ВЫ: " + plaeyr1Win);
+//            score.setText("Winner is player: " + playerName(players, figure).toString() + " figure: " + figure.toString());
+//
+//        } else if (figure.equals("O")) {
+//            ++plaeyr2Win;
+//            score.setText("Winner is player: " + playerName(players, figure).toString() + " figure: " + figure.toString());
+//            // labLoose.setText("ПК: " + loose);
+//
+//        } else if (currentFigure == null) {
+//            if (winnerFigure == null) {
+//                score.setText("No winner and no moves left");
+//
+//            }
+//
+//        }
+
+
+    }
+
+    void endTheGame() {
+        newGameButton.setEnabled(true);
+        for (int i = 0; i < filed.getSize(); i++) {
+            squares[i].setEnabled(false);
+        }
+    }
+
+
+    public boolean lookForWinner(final GameGUI game, Player[] players, int i) {
+        final FiledGUI filedGUI = game.getFiled();
+        final Figure winner = winnerControllerGUI.getWinner(filedGUI);
+        final Figure currentFigure = currentMoveControllerGUI.currentMove(filedGUI);
+
+        if (winner != null) {
+            score.setText("win : " + playerName(players, winner) + " figure: " + currentFigure);
+            if (currentFigure.toString().equals("X")) {
+                plaeyr1Win++;
+            }
+            if (currentFigure.toString().equals("O")) {
+                plaeyr2Win++;
+            }
+            return false;
+        }
+        if (currentFigure == null) {
+            if (winner == null) {
+                score.setText("No winner and no moves left");
+                return false;
+            }
+
+        }
+
+
+        // final int point = i;
+
+
+        filedGUI.setFigure(i, currentFigure);
+
+        score.setText("Player move: " + playerName(players, winner) + "figure: " + currentFigure);
+
+
+        return true;
+    }
+
+
+    /**
+     * @param players
+     * @param input
+     * @return
+     */
+    private String playerName(Player[] players, Figure input) {
+        final Player[] player = new GameGUI(players, null, null).getPlayers();
+
+        if (input == Figure.X) {
+            return player[0].getName().toString();
+
+        }
+        if (input == Figure.O) {
+            return player[1].getName().toString();
+        }
+
+        return null;
 
     }
 }
