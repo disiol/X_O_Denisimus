@@ -117,7 +117,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
             return;
         }
 
-        boolean winner = true;
+//        String winner = true;
         // Одна из клеток
         metka:
 
@@ -130,18 +130,17 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
                 if (lookForWinner == true) {
                     //final Figure currentFigure = currentMoveControllerGUI.currentMove(filed);
 
-                    squares[i].setText(filed.getFigure(i).toString());
-                    squares[i].setFont(new Font("TimesRoman", 0, 36));
-                    score.setText("Player move: " + playerName(players, Figure.X));
+                    squares[i].setFont(new java.awt.Font("TimesRoman", 0, 36));
+                    // winner = lookForWinner;
 
 
-                    winner = lookForWinner;
+                    // Figure figure = ;
 
                 } else {
                     continue metka;
                 }
 
-                if (winner == false) {
+                if (lookForWinner == false) {
                     endTheGame();
 
                 }
@@ -186,20 +185,17 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
 
     public boolean lookForWinner(final GameGUI game, Player[] players, int i) {
-        final FiledGUI filedGUI = game.getFiled();
-        final Figure winner = winnerControllerGUI.getWinner(filedGUI);
-        final Figure currentFigure = currentMoveControllerGUI.currentMove(filedGUI);
-
+        final FiledGUI filed = game.getFiled();
+        final Figure winner = winnerControllerGUI.getWinner(filed);
         if (winner != null) {
-            score.setText("win : " + playerName(players, winner) + " figure: " + currentFigure);
-            if (currentFigure.toString().equals("X")) {
-                plaeyr1Win++;
-            }
-            if (currentFigure.toString().equals("O")) {
-                plaeyr2Win++;
-            }
+
+            System.out.println();
+            score.setText("Winner is player: " + playerName(players, winner) + " Figure: " + winner);
+
+
             return false;
         }
+        final Figure currentFigure = currentMoveControllerGUI.currentMove(filed);
         if (currentFigure == null) {
             if (winner == null) {
                 score.setText("No winner and no moves left");
@@ -208,13 +204,20 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
         }
 
+        final int point = i;
 
-        // final int point = i;
+        moveControllerGUI.applyFigure(filed, point, currentFigure);
+        squares[point].setText(filed.getFigure(point).toString());
+        Figure figure = null;
 
+        if (currentFigure.toString().equals("X")) {
+            figure = Figure.O;
+        }
+        if (currentFigure.toString().equals("O")) {
+            figure = Figure.X;
+        }
 
-        filedGUI.setFigure(i, currentFigure);
-
-        score.setText("Player move: " + playerName(players, winner) + "figure: " + currentFigure);
+        score.setText("Player move: " + playerName(players, figure) + " figure: " + figure);
 
 
         return true;
