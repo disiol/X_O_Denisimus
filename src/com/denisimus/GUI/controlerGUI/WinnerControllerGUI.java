@@ -2,7 +2,9 @@ package com.denisimus.GUI.controlerGUI;
 
 import com.denisimus.CLI.modelCLI.Figure;
 import com.denisimus.GUI.modelGUI.FiledGUI;
+import com.denisimus.GUI.viewGUI.XoGuiPlayerSvPlayer;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class WinnerControllerGUI {
 
             return filed.getFigure(0);
 
+
         }
 
 
@@ -32,6 +35,7 @@ public class WinnerControllerGUI {
         if (check(filed, 3, 4, 5) == true) {
 
             return filed.getFigure(3);
+
 
         }
 
@@ -101,16 +105,14 @@ public class WinnerControllerGUI {
                           final int coordinate1,
                           final int coordinate2,
                           final int coordinate3) {
-        List<Integer> coordinates = new ArrayList<>();
 
         final Figure currentFigure;
         final Figure nextFigure;
 
-        coordinates.add(coordinate1);
+        coordinates(coordinate1, coordinate2, coordinate3);
         currentFigure = filed.getFigure(coordinate1);
         if (currentFigure == null)
             return false;
-        coordinates.add(coordinate2);
         nextFigure = filed.getFigure(coordinate2);
 
         if (currentFigure != nextFigure)
@@ -118,10 +120,25 @@ public class WinnerControllerGUI {
 
         if (nextFigure != filed.getFigure(coordinate3))
             return false;
-        coordinates.add(coordinate3);
 
         return true;
+
+
     }
+
+    List<Integer> coordinates(int win1,
+                              int win2,
+                              int win3) {
+
+        List<Integer> coordinates = new ArrayList<>();
+        coordinates.add(win1);
+        coordinates.add(win2);
+        coordinates.add(win3);
+
+        return coordinates;
+
+    }
+
 
 
 }
