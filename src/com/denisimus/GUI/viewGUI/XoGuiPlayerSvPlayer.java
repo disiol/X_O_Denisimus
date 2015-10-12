@@ -108,6 +108,8 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
                 squares[i].setEnabled(true);
                 squares[i].setText("");
                 squares[i].setBackground(Color.green);
+                moveControllerGUI.applyFigure(filed, i, null);
+
                 score.setText("move player : " + players[0].getName() + " figure: X");
             }
 
@@ -117,24 +119,25 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
             return;
         }
 
-//        String winner = true;
         // Одна из клеток
         metka:
 
         for (int i = 0; i < filed.getSize(); i++) {
 
             if (theButton == squares[i]) {
-                boolean lookForWinner = lookForWinner(gameXO, players, i);
 
 
-                if (lookForWinner == true) {
-                    //final Figure currentFigure = currentMoveControllerGUI.currentMove(filed);
+                boolean lookForWinner;
+                if (squares[i].getText() != "X" && squares[i].getText() != "O") {
+                    final Figure currentFigure = currentMoveControllerGUI.currentMove(filed);
 
                     squares[i].setFont(new java.awt.Font("TimesRoman", 0, 36));
-                    // winner = lookForWinner;
+                    moveControllerGUI.applyFigure(filed, i, currentFigure);
+                    squares[i].setText(filed.getFigure(i).toString());
 
 
-                    // Figure figure = ;
+                    lookForWinner = lookForWinner(gameXO, players, i);
+
 
                 } else {
                     continue metka;
@@ -143,8 +146,8 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
                 if (lookForWinner == false) {
                     endTheGame();
 
-                }
-                break;
+                } else
+                    break;
             }
 
 
@@ -204,20 +207,8 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
         }
 
-        final int point = i;
 
-        moveControllerGUI.applyFigure(filed, point, currentFigure);
-        squares[point].setText(filed.getFigure(point).toString());
-        Figure figure = null;
-
-        if (currentFigure.toString().equals("X")) {
-            figure = Figure.O;
-        }
-        if (currentFigure.toString().equals("O")) {
-            figure = Figure.X;
-        }
-
-        score.setText("Player move: " + playerName(players, figure) + " figure: " + figure);
+        score.setText("Player move: " + playerName(players, currentFigure) + " figure: " + currentFigure);
 
 
         return true;
