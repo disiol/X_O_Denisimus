@@ -175,7 +175,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
             highlightWinner(winnerCoordinates);
 
             score.setText("Winner is player: " + playerName(players, winner) + " Figure: " + winner);
-
+            winerPlayer(winner, players);
 
             return false;
         }
@@ -224,7 +224,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
     }
 
-    private void vinerPlayer(Figure winnerFigure, Player[] players) {
+    private void winerPlayer(Figure winnerFigure, Player[] players) {
         final Player[] player = new GameGUI(players, null, null).getPlayers();
 
         if (winnerFigure == Figure.X) {
