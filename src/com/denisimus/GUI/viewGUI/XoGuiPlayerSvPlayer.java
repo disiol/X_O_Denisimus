@@ -223,5 +223,23 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         return null;
 
     }
+
+    private void vinerPlayer(Figure winnerFigure, Player[] players) {
+        final Player[] player = new GameGUI(players, null, null).getPlayers();
+
+        if (winnerFigure == Figure.X) {
+            plaeyr1Win++;
+            player[0].getName().toString();
+            plaeyr1Name.setText(player[0].getName().toString() + " : " + plaeyr1Win);
+
+
+        }
+        if (winnerFigure == Figure.O) {
+            plaeyr2Win++;
+            plaeyr2Name.setText(player[1].getName().toString() + " : " + plaeyr2Win);
+        }
+
+
+    }
 }
 
