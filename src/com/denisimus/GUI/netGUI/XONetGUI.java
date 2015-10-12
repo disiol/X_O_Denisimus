@@ -7,5 +7,7 @@ package com.denisimus.GUI.netGUI;
  */
 
 public class XONetGUI {
+    //TODO
+
 
 }

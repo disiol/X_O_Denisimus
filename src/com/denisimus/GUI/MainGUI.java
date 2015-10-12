@@ -39,11 +39,17 @@ public class MainGUI extends JFrame {
 
 
         });
+
         playerSVPCButton.addActionListener((ActionEvent e) -> {
+            //TODO
         });
         gameOnANetworkButton.addActionListener((ActionEvent e) -> {
+            //TODO
+
         });
         tableOfRecordsButton.addActionListener((ActionEvent e) -> {
+            //TODO
+
         });
         exitButton.addActionListener((ActionEvent e) -> {
             System.exit(0);

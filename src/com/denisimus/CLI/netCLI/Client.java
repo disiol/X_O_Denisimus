@@ -6,4 +6,6 @@ package com.denisimus.CLI.netCLI;
  */
 
 public class Client {
+    //TODO
+
 }

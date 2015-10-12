@@ -7,5 +7,7 @@ package com.denisimus.CLI.netCLI;
  */
 
 public class XONet {
+    //TODO
+
 
 }
