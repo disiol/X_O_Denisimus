@@ -1,9 +1,7 @@
 package com.denisimus.GUI.controlerGUI;
 
-import com.denisimus.GUI.modelGUI.FiledGUI;
 import com.denisimus.CLI.modelCLI.Figure;
-
-import java.awt.*;
+import com.denisimus.GUI.modelGUI.FiledGUI;
 
 /**
  * Author: Olenyk Denis (deoniisii@gmail.com)
@@ -24,9 +22,9 @@ public class CurrentMoveControllerGUI {
 
         if (countFigure % 2 == 0) {
             return Figure.X;
+        } else {
+            return Figure.O;
         }
-
-        return Figure.O;
 
 
     }

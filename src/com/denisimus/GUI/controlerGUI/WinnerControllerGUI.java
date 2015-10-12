@@ -14,7 +14,19 @@ import java.util.List;
  */
 
 public class WinnerControllerGUI {
-    private List<Integer> coordinates;
+    private int winnerCoordinates[] = new int[3];
+
+    private void setWinnerCoordinates(int coordinate1, int coordinate2, int coordinate3) {
+        this.winnerCoordinates[0] = coordinate1;
+        this.winnerCoordinates[1] = coordinate2;
+        this.winnerCoordinates[2] = coordinate3;
+    }
+
+
+    public int[] getWinnerCoordinates() {
+        return winnerCoordinates;
+    }
+
 
     public Figure getWinner(final FiledGUI filed) {
 
@@ -44,6 +56,7 @@ public class WinnerControllerGUI {
 
             return filed.getFigure(6);
 
+
         }
 
 
@@ -52,6 +65,7 @@ public class WinnerControllerGUI {
         if (check(filed, 0, 3, 6) == true) {
 
             return filed.getFigure(0);
+
 
         }
 
@@ -63,6 +77,7 @@ public class WinnerControllerGUI {
 
             return filed.getFigure(1);
 
+
         }
 
 
@@ -72,6 +87,7 @@ public class WinnerControllerGUI {
         if (check(filed, 2, 5, 8) == true) {
 
             return filed.getFigure(2);
+
 
         }
 
@@ -83,6 +99,7 @@ public class WinnerControllerGUI {
 
             return filed.getFigure(0);
 
+
         }
 
 
@@ -92,6 +109,7 @@ public class WinnerControllerGUI {
         if (check(filed, 2, 4, 6) == true) {
 
             return filed.getFigure(2);
+
 
         }
 
@@ -108,7 +126,7 @@ public class WinnerControllerGUI {
         final Figure currentFigure;
         final Figure nextFigure;
 
-        setCoordinates(coordinate1, coordinate2, coordinate3);
+        
         currentFigure = filed.getFigure(coordinate1);
         if (currentFigure == null)
             return false;
@@ -119,28 +137,15 @@ public class WinnerControllerGUI {
 
         if (nextFigure != filed.getFigure(coordinate3))
             return false;
+        setWinnerCoordinates(coordinate1, coordinate2, coordinate3);
 
         return true;
 
 
     }
 
-    private void setCoordinates(int win1,
-                                int win2,
-                                int win3) {
-
-        List<Integer> coordinates = new ArrayList<>();
-        coordinates.add(win1);
-        coordinates.add(win2);
-        coordinates.add(win3);
 
 
-    }
-
-
-    public List<Integer> getCoordinates() {
-        return coordinates;
-    }
 
 
 }

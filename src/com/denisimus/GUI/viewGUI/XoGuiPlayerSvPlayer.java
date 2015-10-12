@@ -127,8 +127,8 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
             if (theButton == squares[i]) {
 
 
-                boolean lookForWinner;
-                if (squares[i].getText() != "X" && squares[i].getText() != "O") {
+                boolean lookForWinner = true;
+                if (lookForWinner == true) {
                     final Figure currentFigure = currentMoveControllerGUI.currentMove(filed);
 
                     squares[i].setFont(new java.awt.Font("TimesRoman", 0, 36));
@@ -153,31 +153,9 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
         }
 
-//
-//        Figure currentFigure = currentMoveControllerGUI.currentMove(filed);
-//        final Figure figure = new CurrentMoveControllerGUI().currentMove(filed);
-//
-//
-//        if (figure.equals("X")) {
-//            ++plaeyr1Win;
-//            //labWin.setText("ВЫ: " + plaeyr1Win);
-//            score.setText("Winner is player: " + playerName(players, figure).toString() + " figure: " + figure.toString());
-//
-//        } else if (figure.equals("O")) {
-//            ++plaeyr2Win;
-//            score.setText("Winner is player: " + playerName(players, figure).toString() + " figure: " + figure.toString());
-//            // labLoose.setText("ПК: " + loose);
-//
-//        } else if (currentFigure == null) {
-//            if (winnerFigure == null) {
-//                score.setText("No winner and no moves left");
-//
-//            }
-//
-//        }
-
 
     }
+
 
     void endTheGame() {
         newGameButton.setEnabled(true);
@@ -190,9 +168,12 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
     public boolean lookForWinner(final GameGUI game, Player[] players, int i) {
         final FiledGUI filed = game.getFiled();
         final Figure winner = winnerControllerGUI.getWinner(filed);
+        final int[] winnerCoordinates = winnerControllerGUI.getWinnerCoordinates();
         if (winner != null) {
 
-            System.out.println();
+
+            highlightWinner(winnerCoordinates);
+
             score.setText("Winner is player: " + playerName(players, winner) + " Figure: " + winner);
 
 
@@ -212,6 +193,14 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
 
         return true;
+    }
+
+
+    void highlightWinner(int highlightWinner[]) {
+
+        squares[highlightWinner[0]].setBackground(Color.RED);
+        squares[highlightWinner[1]].setBackground(Color.RED);
+        squares[highlightWinner[2]].setBackground(Color.RED);
     }
 
 
