@@ -15,6 +15,8 @@ import java.awt.event.ActionListener;
 
 /**
  * Author: Olenyk Denis (deoniisii@gmail.com) on 07.08.15.
+ *
+ * @version 1.0
  */
 public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
     final Player[] players = new Player[2];
@@ -26,11 +28,12 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
     JButton squares[];
     JButton newGameButton;
     JLabel score = new JLabel("Puth the new game button");
-    JLabel plaeyr1Name = new JLabel("plaeyr1Name");
-    JLabel plaeyr2Name = new JLabel("plaeyr2Name");
-    int plaeyr1Win = 0;
-    int plaeyr2Win = 0;
-    Figure winnerFigure = null;
+    JLabel player1Name = new JLabel("plaeyr1 Name");
+    JLabel player2Name = new JLabel("plaeyr 2Name");
+    JLabel noWinnerJLabel = new JLabel(" No winner: ");
+    int player1Win = 0;
+    int player2Win = 0;
+    int noWinner = 0;
 
     //private Figure figure;
 
@@ -62,16 +65,17 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         frame.setFont(font);
 
         // Кнопка “New Game” и слушатель действия
-        plaeyr1Name = new JLabel(plaeyrs[0].getName() + " : " + plaeyr1Win);
-        plaeyr2Name = new JLabel(plaeyrs[1].getName() + " : " + plaeyr2Win);
+        player1Name = new JLabel(plaeyrs[0].getName() + " : " + player1Win);
+        player2Name = new JLabel(plaeyrs[1].getName() + " : " + player2Win);
         newGameButton = new JButton("New game");
         newGameButton.addActionListener(this);
 
         Panel topPanel = new Panel();
         topPanel.setLayout(new BorderLayout());
         topPanel.add(newGameButton, "North");
-        topPanel.add(plaeyr1Name, "West");
-        topPanel.add(plaeyr2Name, "East");
+        topPanel.add(player1Name, "West");
+        topPanel.add(player2Name, "East");
+        //topPanel.add(noWinnerJLabel, "Center");
         frame.add(topPanel, "North");
         Panel centerPanel = new Panel();
         centerPanel.setLayout(new GridLayout(3, 3));
@@ -228,16 +232,17 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         final Player[] player = new GameGUI(players, null, null).getPlayers();
 
         if (winnerFigure == Figure.X) {
-            plaeyr1Win++;
+            player1Win++;
             player[0].getName().toString();
-            plaeyr1Name.setText(player[0].getName().toString() + " : " + plaeyr1Win);
+            player1Name.setText(player[0].getName().toString() + " : " + player1Win);
 
 
         }
         if (winnerFigure == Figure.O) {
-            plaeyr2Win++;
-            plaeyr2Name.setText(player[1].getName().toString() + " : " + plaeyr2Win);
+            player2Win++;
+            player2Name.setText(player[1].getName().toString() + " : " + player2Win);
         }
+        if (winnerFigure == null) ;
 
 
     }
