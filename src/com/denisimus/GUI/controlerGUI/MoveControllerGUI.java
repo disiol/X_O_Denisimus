@@ -16,13 +16,16 @@ import java.awt.*;
 public class MoveControllerGUI {
 
 
-    public void applyFigure(FiledGUI filedGUI,
+    public void applyFigure(FiledGUI filed,
                             int point,
-                            Figure figure) {
+                            Figure figure) throws InvalidPointException,
+            AlreadyOccupantException {
 
+        if (filed.getFigure(point) != null) {
+            throw new AlreadyOccupantException();
+        }
 
-
-        filedGUI.setFigure(point, figure);
+        filed.setFigure(point, figure);
 
 
     }

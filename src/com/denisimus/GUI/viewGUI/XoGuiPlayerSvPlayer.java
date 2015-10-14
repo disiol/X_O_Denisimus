@@ -2,6 +2,8 @@ package com.denisimus.GUI.viewGUI;
 
 import com.denisimus.CLI.modelCLI.Figure;
 import com.denisimus.CLI.modelCLI.Player;
+import com.denisimus.CLI.modelCLI.exeptions.AlreadyOccupantException;
+import com.denisimus.CLI.modelCLI.exeptions.InvalidPointException;
 import com.denisimus.GUI.controlerGUI.CurrentMoveControllerGUI;
 import com.denisimus.GUI.controlerGUI.MoveControllerGUI;
 import com.denisimus.GUI.controlerGUI.WinnerControllerGUI;
@@ -16,7 +18,7 @@ import java.awt.event.ActionListener;
 /**
  * Author: Olenyk Denis (deoniisii@gmail.com) on 07.08.15.
  *
- * @version 1.0
+ * @version 1.1
  */
 public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
     final Player[] players = new Player[2];
@@ -112,13 +114,11 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
                 squares[i].setEnabled(true);
                 squares[i].setText("");
                 squares[i].setBackground(Color.green);
-                moveControllerGUI.applyFigure(filed, i, null);
-
+                filed.setFigure(i, null);
                 score.setText("move player : " + players[0].getName() + " figure: X");
             }
 
-            //  Figure figure = Figure.X;
-            //   score.setText("move player : " + playerName(players, figure));
+
             newGameButton.setEnabled(true);
             return;
         }
@@ -136,7 +136,11 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
                     final Figure currentFigure = currentMoveControllerGUI.currentMove(filed);
 
                     squares[i].setFont(new java.awt.Font("TimesRoman", 0, 36));
-                    moveControllerGUI.applyFigure(filed, i, currentFigure);
+                    try {
+                        moveControllerGUI.applyFigure(filed, i, currentFigure);
+                    } catch (InvalidPointException | AlreadyOccupantException e1) {
+                        e1.printStackTrace();
+                    }
                     squares[i].setText(filed.getFigure(i).toString());
 
 
@@ -179,7 +183,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
             highlightWinner(winnerCoordinates);
 
             score.setText("Winner is player: " + playerName(players, winner) + " Figure: " + winner);
-            winerPlayer(winner, players);
+            winnerPlayer(winner, players);
 
             return false;
         }
@@ -191,7 +195,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
             }
 
         }
-
+        squares[i].setFont(new java.awt.Font("TimesRoman", 0, 36));
 
         score.setText("Player move: " + playerName(players, currentFigure) + " figure: " + currentFigure);
 
@@ -228,7 +232,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
 
     }
 
-    private void winerPlayer(Figure winnerFigure, Player[] players) {
+    private void winnerPlayer(Figure winnerFigure, Player[] players) {
         final Player[] player = new GameGUI(players, null, null).getPlayers();
 
         if (winnerFigure == Figure.X) {

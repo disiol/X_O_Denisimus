@@ -1,5 +1,7 @@
 package com.denisimus.GUI;
 
+import com.denisimus.GUI.netGUI.ServerOrClientGUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -37,14 +39,15 @@ public class MainGUI extends JFrame {
             playersNames.frame.setVisible(true);
 
 
-
         });
 
         playerSVPCButton.addActionListener((ActionEvent e) -> {
             //TODO
         });
         gameOnANetworkButton.addActionListener((ActionEvent e) -> {
-            //TODO
+            main.setVisible(false);
+            new ServerOrClientGUI();
+
 
         });
         tableOfRecordsButton.addActionListener((ActionEvent e) -> {

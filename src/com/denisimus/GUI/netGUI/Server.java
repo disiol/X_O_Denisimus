@@ -2,10 +2,10 @@ package com.denisimus.GUI.netGUI;
 
 /**
  * Author: Olenyk Denis (deoniisii@gmail.com)
- * on 12.10.15.
+ * on 13.10.15.
  */
 
-public class ServerGUI {
-    //TODO
+public class Server {
+
 
 }
