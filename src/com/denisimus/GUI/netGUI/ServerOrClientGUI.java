@@ -19,17 +19,13 @@ public class ServerOrClientGUI extends JFrame {
     private final JButton OKButton = new JButton("OK");
     private final JLabel askLabel = new JLabel("Cheese please ho ara you server or client and pres");
 
-//    public static void main(String[] args) {
-//        ServerOrClientGUI serverOrClientGUI = new ServerOrClientGUI();
-//        serverOrClientGUI.jFrame.setVisible(true);
-//    }
+
 
     public ServerOrClientGUI() {
         jFrame.setLayout(new GridLayout(0, 1));
         jFrame.add(askLabel);
         jFrame.add(ServerRadioButton);
         jFrame.add(ClientRadioButton);
-        // jFrame.add(OKButton);
         jFrame.setSize(300, 300);
         jFrame.setLocationRelativeTo(null);
         jFrame.pack();
@@ -38,24 +34,25 @@ public class ServerOrClientGUI extends JFrame {
 
         ServerRadioButton.addActionListener((ActionEvent e) -> {
             jFrame.setVisible(false);
-            System.out.println("Server");
-
-        });
-
-        ServerRadioButton.addKeyListener(new KeyAdapter() {
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ENTER:
-                        //TODO
-                        break;
-
-                }
-
+            Server server = null;
+            try {
+                server = new Server();
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
+            server.frame.setVisible(true);
+        });
+
+        ClientRadioButton.addActionListener((ActionEvent e) -> {
+            jFrame.setVisible(false);
+            System.out.println("Client");
+            //TODO
 
         });
+
+
+
+
 
     }
 }

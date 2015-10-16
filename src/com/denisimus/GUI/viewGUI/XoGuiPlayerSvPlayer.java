@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
 /**
  * Author: Olenyk Denis (deoniisii@gmail.com) on 07.08.15.
  *
- * @version 1.1
+ * @version 1.2
  */
 public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
     final Player[] players = new Player[2];
@@ -32,19 +32,20 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
     JLabel score = new JLabel("Puth the new game button");
     JLabel player1Name = new JLabel("plaeyr1 Name");
     JLabel player2Name = new JLabel("plaeyr 2Name");
-    JLabel noWinnerJLabel = new JLabel(" No winner: ");
+
+
+    int noWinner = 0;
+    JLabel noWinnerJLabel = new JLabel("   No winner: " + noWinner);
+
     int player1Win = 0;
     int player2Win = 0;
-    int noWinner = 0;
-
-    //private Figure figure;
 
 
-    public void setGuiXO(String plaeyr1, String plaeyr2) {
+    public void setGuiXO(String player1, String player2) {
 
 
-        final String name1 = plaeyr1;
-        final String name2 = plaeyr2;
+        final String name1 = player1;
+        final String name2 = player2;
 
         //написать волидатор
 
@@ -60,7 +61,8 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         // Менеджер расположения апплета, шрифт и цвет
         frame.setLayout(new BorderLayout());
         frame.setBackground(Color.WHITE);
-        frame.setSize(500, 500);
+        frame.setSize(530, 550);
+        frame.setResizable(false);
 
         // Шрифт
         Font font = new Font("Monospased", Font.BOLD, 20);
@@ -77,7 +79,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         topPanel.add(newGameButton, "North");
         topPanel.add(player1Name, "West");
         topPanel.add(player2Name, "East");
-        //topPanel.add(noWinnerJLabel, "Center");
+        topPanel.add(noWinnerJLabel, "Center");
         frame.add(topPanel, "North");
         Panel centerPanel = new Panel();
         centerPanel.setLayout(new GridLayout(3, 3));
@@ -246,7 +248,10 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
             player2Win++;
             player2Name.setText(player[1].getName().toString() + " : " + player2Win);
         }
-        if (winnerFigure == null) ;
+        if (winnerFigure == null) {
+            noWinner++;
+            noWinnerJLabel.setText("   No winner:" + noWinner);
+        }
 
 
     }
