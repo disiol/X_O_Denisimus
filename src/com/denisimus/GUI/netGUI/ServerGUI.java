@@ -28,7 +28,7 @@ public class ServerGUI extends JFrame {
     JButton startServerButton = new JButton("Start server");
     JLabel socketAddressJLabel = new JLabel("ServerGUI not start");
 
-    JTextField enterTheNameOfPlayer1avTextField = new JTextField("enterTheNameOfPlayer1avTextField");
+    JTextField enterTheNameOfPlayer1TextField = new JTextField("enterTheNameOfPlayer1");
     JTextField portField = new JTextField("1111");
 
     private static final Logger LOG = Logger.getLogger(ServerGUI.class.getName());
@@ -47,7 +47,7 @@ public class ServerGUI extends JFrame {
                 GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 2, 2, 2), 0, 0));
 
-        Mainframe.add(enterTheNameOfPlayer1avTextField, new GridBagConstraints(1, 0, 1, 1, 1, 1,
+        Mainframe.add(enterTheNameOfPlayer1TextField, new GridBagConstraints(1, 0, 1, 1, 1, 1,
                 GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 2, 2, 2), 0, 0));
 
@@ -107,7 +107,7 @@ public class ServerGUI extends JFrame {
 
 
 //TODO
-            System.out.println(enterTheNameOfPlayer1avTextField.getText());
+            System.out.println(enterTheNameOfPlayer1TextField.getText());
 
 
             socketAddressJLabel.setText("ServerGUI start, host address: " + address);

@@ -44,8 +44,7 @@ public class ServerOrClientGUI extends JFrame {
 
         ClientRadioButton.addActionListener((ActionEvent e) -> {
             jFrame.setVisible(false);
-            System.out.println("Client");
-            //TODO
+            ClientGUI clientGUI = new ClientGUI();
 
         });
 

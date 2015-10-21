@@ -52,7 +52,7 @@ public class StartServerThreadGUI extends Thread {
             String address = serverSocket.getInetAddress().getHostAddress();
 
 
-            System.out.println(serverGUI.enterTheNameOfPlayer1avTextField.getText());
+            System.out.println(serverGUI.enterTheNameOfPlayer1TextField.getText());
 
 
             serverGUI.socketAddressJLabel.setText("ServerGUI start, host address: " + address);
