@@ -70,7 +70,7 @@ public class Server extends JFrame {
         Mainframe.pack();
 
         OKButton.addActionListener((ActionEvent e) -> {
-            StartServer startServer = new StartServer();
+            StartServerThread startServerThread = new StartServerThread();
 
 
         });

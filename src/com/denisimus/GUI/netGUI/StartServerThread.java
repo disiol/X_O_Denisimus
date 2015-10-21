@@ -1,5 +1,6 @@
 package com.denisimus.GUI.netGUI;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,13 +14,13 @@ import java.util.logging.Logger;
  * on 21.10.15.
  */
 
-public class StartServer extends Thread {
+public class StartServerThread extends Thread {
 
     private static final Logger LOG = Logger.getLogger(Server.class.getName());
 
 
     // Конструктор
-    StartServer() {
+    StartServerThread() {
         // Создаём новый второй поток
         super("Start Server");
         LOG.info("The second thread is created: " + this);
@@ -57,6 +58,15 @@ public class StartServer extends Thread {
 
             LOG.info("Server start, local socket address: " + serverSocket.getLocalSocketAddress());
 
+            server.OKButton.setText("Exit");
+            server.OKButton.addActionListener((ActionEvent e) -> {
+                System.exit(0);
+            });
+
+
+            server.Mainframe.pack();
+
+
             while (true) {
                 try (Socket socket = serverSocket.accept()) {
 
@@ -89,24 +99,4 @@ public class StartServer extends Thread {
 
 
     }
-
-    private void visiblePlayerSvPlayer() {
-        //TODO
-//        String player1 = enterTheNameOfPlayer1avTextField.getText();
-//        String player2 = enterTheNameOfPlayer2TextField.getText();
-//
-//        if (player1.equals("") && player2.equals("") || player1.equals("")
-//                || player2.equals("")) {
-//            Mainframe.setVisible(true);
-//            emptyLabel.setText("Names cannot be empty");
-//        } else {
-//
-//            Mainframe.setVisible(false);
-//            XoGuiPlayerSvPlayer xoGuiPlayerSvPlayer = new XoGuiPlayerSvPlayer();
-//            xoGuiPlayerSvPlayer.setGuiXO(player1, player2);
-//
-//        }
-
-    }
-
 }
