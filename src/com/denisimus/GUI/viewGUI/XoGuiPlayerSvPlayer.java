@@ -193,6 +193,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         if (currentFigure == null) {
             if (winner == null) {
                 score.setText("No winner and no moves left");
+                winnerPlayer(winner, null);
                 return false;
             }
 
@@ -248,6 +249,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
             player2Win++;
             player2Name.setText(player[1].getName().toString() + " : " + player2Win);
         }
+
         if (winnerFigure == null) {
             noWinner++;
             noWinnerJLabel.setText("   No winner:" + noWinner);

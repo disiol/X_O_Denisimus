@@ -32,8 +32,11 @@ public class StartServerThread extends Thread {
         try {
             startServer2();
         } catch (InterruptedException e) {
+            LOG.info("InterruptedException: " + e);
             LOG.info("The second thread is interrupted");
         } catch (Exception e) {
+            LOG.info("Exception: " + e);
+
             e.printStackTrace();
         }
         LOG.info("The second thread is complete");
@@ -49,7 +52,6 @@ public class StartServerThread extends Thread {
             String address = serverSocket.getInetAddress().getHostAddress();
 
 
-//TODO
             System.out.println(server.enterTheNameOfPlayer1avTextField.getText());
 
 
@@ -58,8 +60,9 @@ public class StartServerThread extends Thread {
 
             LOG.info("Server start, local socket address: " + serverSocket.getLocalSocketAddress());
 
-            server.OKButton.setText("Exit");
-            server.OKButton.addActionListener((ActionEvent e) -> {
+
+            server.startServerButton.setText("Exit");
+            server.startServerButton.addActionListener((ActionEvent e) -> {
                 System.exit(0);
             });
 
@@ -68,6 +71,8 @@ public class StartServerThread extends Thread {
 
 
             while (true) {
+
+                //TODO
                 try (Socket socket = serverSocket.accept()) {
 
 

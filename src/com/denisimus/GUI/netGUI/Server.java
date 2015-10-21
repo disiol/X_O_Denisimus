@@ -25,7 +25,7 @@ public class Server extends JFrame {
     JLabel player1Label = new JLabel("Player1");
     JLabel portLabel = new JLabel("Hosts port:");
 
-    JButton OKButton = new JButton("Start server");
+    JButton startServerButton = new JButton("Start server");
     JLabel socketAddressJLabel = new JLabel("Server not start");
 
     JTextField enterTheNameOfPlayer1avTextField = new JTextField("enterTheNameOfPlayer1avTextField");
@@ -59,7 +59,7 @@ public class Server extends JFrame {
                 GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 2, 2, 2), 0, 0));
 
-        Mainframe.add(OKButton, new GridBagConstraints(0, 3, 1, 1, 1, 1,
+        Mainframe.add(startServerButton, new GridBagConstraints(0, 3, 1, 1, 1, 1,
                 GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 2, 2, 2), 0, 0));
         Mainframe.add(socketAddressJLabel, new GridBagConstraints(1, 3, 2, 1, 1, 1,
@@ -69,24 +69,23 @@ public class Server extends JFrame {
         Mainframe.setVisible(true);
         Mainframe.pack();
 
-        OKButton.addActionListener((ActionEvent e) -> {
+        startServerButton.addActionListener((ActionEvent e) -> {
+            Mainframe.setVisible(false);
             StartServerThread startServerThread = new StartServerThread();
 
 
         });
 
-        enterTheNameOfPlayer1avTextField.addKeyListener(new KeyAdapter() {
+        startServerButton.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_ENTER:
-                        try {
-                            Mainframe.setVisible(false);
-                            //startServer();
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
+
+                        Mainframe.setVisible(false);
+                        StartServerThread startServerThread = new StartServerThread();
+
                         break;
 
                 }
