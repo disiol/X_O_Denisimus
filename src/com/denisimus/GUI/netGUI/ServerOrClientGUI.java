@@ -35,10 +35,11 @@ public class ServerOrClientGUI extends JFrame {
             Server server = null;
             try {
                 server = new Server();
+                server.Mainframe.setVisible(true);
+
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-            server.frame.setVisible(true);
         });
 
         ClientRadioButton.addActionListener((ActionEvent e) -> {

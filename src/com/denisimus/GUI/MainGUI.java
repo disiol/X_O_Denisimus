@@ -14,7 +14,7 @@ public class MainGUI extends JFrame {
 
     private final JButton playerSVPlayerButton = new JButton("Player SV Player");
     private final JButton playerSVPCButton = new JButton("Player SV PC");
-    private final JButton gameOnANetworkButton = new JButton("Game On ANetwork");
+    private final JButton gameOnANetworkButton = new JButton("Game on a network");
     private final JButton tableOfRecordsButton = new JButton("Table Of Records");
     private final JButton exitButton = new JButton("exit");
     JFrame main = new JFrame("X_O_denisimus");

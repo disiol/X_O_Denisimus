@@ -20,36 +20,58 @@ import java.util.logging.Logger;
 
 public class Server extends JFrame {
 
-    private final JButton OKButton = new JButton("OK");
-    private final JLabel emptyLabel = new JLabel("");
-    JFrame frame = new JFrame("Server");
-    private JFormattedTextField enterTheNameOfPlayer1avTextField = new JFormattedTextField("Enter the name of player1");
-    private JLabel socketAddressJLabel = new JLabel("");
+    JFrame Mainframe = new JFrame("ServerXO");
 
+    JLabel player1Label = new JLabel("Player1");
+    JLabel portLabel = new JLabel("Hosts port:");
+
+    JButton OKButton = new JButton("Start server");
+    JLabel socketAddressJLabel = new JLabel("Server not start");
+
+    JTextField enterTheNameOfPlayer1avTextField = new JTextField("enterTheNameOfPlayer1avTextField");
+    JTextField portField = new JTextField("1111");
 
     private static final Logger LOG = Logger.getLogger(Server.class.getName());
 
     public Server() {
 
 
-        frame.setLayout(new GridLayout(0, 1));
-        frame.add(enterTheNameOfPlayer1avTextField);
-        frame.add(socketAddressJLabel);
-        frame.add(OKButton);
-        frame.add(emptyLabel);
-        frame.setSize(300, 300);
-        frame.setLocationRelativeTo(null);
-        frame.pack();
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Mainframe.setSize(600, 400);
+        Mainframe.setLayout(new GridBagLayout());
 
+        Mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Mainframe.setLocationRelativeTo(null);
+        Mainframe.setResizable(false);
+
+        Mainframe.add(player1Label, new GridBagConstraints(0, 0, 1, 1, 1, 1,
+                GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+                new Insets(2, 2, 2, 2), 0, 0));
+
+        Mainframe.add(enterTheNameOfPlayer1avTextField, new GridBagConstraints(1, 0, 1, 1, 1, 1,
+                GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+                new Insets(2, 2, 2, 2), 0, 0));
+
+        Mainframe.add(portLabel, new GridBagConstraints(0, 1, 1, 1, 1, 1,
+                GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+                new Insets(2, 2, 2, 2), 0, 0));
+
+        Mainframe.add(portField, new GridBagConstraints(1, 1, 1, 1, 1, 1,
+                GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+                new Insets(2, 2, 2, 2), 0, 0));
+
+        Mainframe.add(OKButton, new GridBagConstraints(0, 3, 1, 1, 1, 1,
+                GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+                new Insets(2, 2, 2, 2), 0, 0));
+        Mainframe.add(socketAddressJLabel, new GridBagConstraints(1, 3, 2, 1, 1, 1,
+                GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+                new Insets(2, 2, 2, 2), 0, 0));
+
+        Mainframe.setVisible(true);
+        Mainframe.pack();
 
         OKButton.addActionListener((ActionEvent e) -> {
-            //TODO
-            try {
-                startServer();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            StartServer startServer = new StartServer();
+
 
         });
 
@@ -60,7 +82,8 @@ public class Server extends JFrame {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_ENTER:
                         try {
-                            startServer();
+                            Mainframe.setVisible(false);
+                            //startServer();
                         } catch (Exception e1) {
                             e1.printStackTrace();
                         }
@@ -76,28 +99,27 @@ public class Server extends JFrame {
     }
 
 
-    private void startServer() throws Exception {
-
-        frame.setLayout(new GridLayout(0, 1));
-        frame.add(enterTheNameOfPlayer1avTextField);
-        frame.add(socketAddressJLabel);
-        frame.add(OKButton);
-        frame.add(emptyLabel);
-        frame.setSize(300, 300);
-        frame.setLocationRelativeTo(null);
-        frame.pack();
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    private void startServer2() throws Exception {
 
 
-        try (ServerSocket serverSocket = new ServerSocket(1111, 0, InetAddress.getLocalHost())) {
-            String address = serverSocket.getInetAddress().toString();
-            InetAddress outputStream = serverSocket.getInetAddress();
-            socketAddressJLabel.setText("Server start socket address: " + outputStream.toString());
+        Integer portInt = new Integer(portField.getText());
+        try (ServerSocket serverSocket = new ServerSocket(portInt, 0, InetAddress.getLocalHost())) {
+            String address = serverSocket.getInetAddress().getHostAddress();
+
+
+//TODO
             System.out.println(enterTheNameOfPlayer1avTextField.getText());
-            System.out.println("Server start socket address: " + address);
+
+
+            socketAddressJLabel.setText("Server start, host address: " + address);
+
+
+            LOG.info("Server start, local socket address: " + serverSocket.getLocalSocketAddress());
 
             while (true) {
                 try (Socket socket = serverSocket.accept()) {
+
+
                     serverClient(socket);
 
                 }
@@ -110,6 +132,7 @@ public class Server extends JFrame {
     private static void serverClient(Socket socket) throws IOException {
         LOG.info("Serving client " + socket.getInetAddress());
 
+//TODO
         InputStream inputStream = socket.getInputStream();
         OutputStream outputStream = socket.getOutputStream();
 
@@ -126,23 +149,5 @@ public class Server extends JFrame {
 
     }
 
-    private void visiblePlayerSvPlayer() {
-        //TODO
-//        String player1 = enterTheNameOfPlayer1avTextField.getText();
-//        String player2 = enterTheNameOfPlayer2TextField.getText();
-//
-//        if (player1.equals("") && player2.equals("") || player1.equals("")
-//                || player2.equals("")) {
-//            frame.setVisible(true);
-//            emptyLabel.setText("Names cannot be empty");
-//        } else {
-//
-//            frame.setVisible(false);
-//            XoGuiPlayerSvPlayer xoGuiPlayerSvPlayer = new XoGuiPlayerSvPlayer();
-//            xoGuiPlayerSvPlayer.setGuiXO(player1, player2);
-//
-//        }
-
-    }
 
 }

@@ -12,6 +12,7 @@ import java.util.Scanner;
  * Главное меню
  * <p>
  * --CLI -консольный режим
+ * @version 1.1
  */
 
 public class Main {
