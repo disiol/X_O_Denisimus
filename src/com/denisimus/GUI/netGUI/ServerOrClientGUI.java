@@ -11,8 +11,8 @@ import java.awt.event.ActionEvent;
  */
 
 public class ServerOrClientGUI extends JFrame {
-    JFrame jFrame = new JFrame("Server or client");
-    private final JRadioButton ServerRadioButton = new JRadioButton("Server");
+    JFrame jFrame = new JFrame("ServerGUI or client");
+    private final JRadioButton ServerRadioButton = new JRadioButton("ServerGUI");
     private final JRadioButton ClientRadioButton = new JRadioButton("Client");
     private final JButton OKButton = new JButton("OK");
     private final JLabel askLabel = new JLabel("Cheese please ho ara you server or client and pres");
@@ -32,10 +32,10 @@ public class ServerOrClientGUI extends JFrame {
 
         ServerRadioButton.addActionListener((ActionEvent e) -> {
             jFrame.setVisible(false);
-            Server server = null;
+            ServerGUI serverGUI = null;
             try {
-                server = new Server();
-                server.Mainframe.setVisible(true);
+                serverGUI = new ServerGUI();
+                serverGUI.Mainframe.setVisible(true);
 
             } catch (Exception e1) {
                 e1.printStackTrace();

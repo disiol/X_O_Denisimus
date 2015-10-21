@@ -14,15 +14,15 @@ import java.util.logging.Logger;
  * on 21.10.15.
  */
 
-public class StartServerThread extends Thread {
+public class StartServerThreadGUI extends Thread {
 
-    private static final Logger LOG = Logger.getLogger(Server.class.getName());
+    private static final Logger LOG = Logger.getLogger(ServerGUI.class.getName());
 
 
     // Конструктор
-    StartServerThread() {
+    StartServerThreadGUI() {
         // Создаём новый второй поток
-        super("Start Server");
+        super("Start ServerGUI");
         LOG.info("The second thread is created: " + this);
         start(); // Запускаем поток
     }
@@ -44,30 +44,30 @@ public class StartServerThread extends Thread {
 
 
     private void startServer2() throws Exception {
-        Server server = new Server();
+        ServerGUI serverGUI = new ServerGUI();
 
 
-        Integer portInt = new Integer(server.portField.getText());
+        Integer portInt = new Integer(serverGUI.portField.getText());
         try (ServerSocket serverSocket = new ServerSocket(portInt, 0, InetAddress.getLocalHost())) {
             String address = serverSocket.getInetAddress().getHostAddress();
 
 
-            System.out.println(server.enterTheNameOfPlayer1avTextField.getText());
+            System.out.println(serverGUI.enterTheNameOfPlayer1avTextField.getText());
 
 
-            server.socketAddressJLabel.setText("Server start, host address: " + address);
+            serverGUI.socketAddressJLabel.setText("ServerGUI start, host address: " + address);
 
 
-            LOG.info("Server start, local socket address: " + serverSocket.getLocalSocketAddress());
+            LOG.info("ServerGUI start, local socket address: " + serverSocket.getLocalSocketAddress());
 
 
-            server.startServerButton.setText("Exit");
-            server.startServerButton.addActionListener((ActionEvent e) -> {
+            serverGUI.startServerButton.setText("Exit");
+            serverGUI.startServerButton.addActionListener((ActionEvent e) -> {
                 System.exit(0);
             });
 
 
-            server.Mainframe.pack();
+            serverGUI.Mainframe.pack();
 
 
             while (true) {

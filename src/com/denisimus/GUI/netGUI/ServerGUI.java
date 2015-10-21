@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * on 14.10.15.
  */
 
-public class Server extends JFrame {
+public class ServerGUI extends JFrame {
 
     JFrame Mainframe = new JFrame("ServerXO");
 
@@ -26,14 +26,14 @@ public class Server extends JFrame {
     JLabel portLabel = new JLabel("Hosts port:");
 
     JButton startServerButton = new JButton("Start server");
-    JLabel socketAddressJLabel = new JLabel("Server not start");
+    JLabel socketAddressJLabel = new JLabel("ServerGUI not start");
 
     JTextField enterTheNameOfPlayer1avTextField = new JTextField("enterTheNameOfPlayer1avTextField");
     JTextField portField = new JTextField("1111");
 
-    private static final Logger LOG = Logger.getLogger(Server.class.getName());
+    private static final Logger LOG = Logger.getLogger(ServerGUI.class.getName());
 
-    public Server() {
+    public ServerGUI() {
 
 
         Mainframe.setSize(600, 400);
@@ -71,7 +71,7 @@ public class Server extends JFrame {
 
         startServerButton.addActionListener((ActionEvent e) -> {
             Mainframe.setVisible(false);
-            StartServerThread startServerThread = new StartServerThread();
+            StartServerThreadGUI startServerThreadGUI = new StartServerThreadGUI();
 
 
         });
@@ -84,7 +84,7 @@ public class Server extends JFrame {
                     case KeyEvent.VK_ENTER:
 
                         Mainframe.setVisible(false);
-                        StartServerThread startServerThread = new StartServerThread();
+                        StartServerThreadGUI startServerThreadGUI = new StartServerThreadGUI();
 
                         break;
 
@@ -110,10 +110,10 @@ public class Server extends JFrame {
             System.out.println(enterTheNameOfPlayer1avTextField.getText());
 
 
-            socketAddressJLabel.setText("Server start, host address: " + address);
+            socketAddressJLabel.setText("ServerGUI start, host address: " + address);
 
 
-            LOG.info("Server start, local socket address: " + serverSocket.getLocalSocketAddress());
+            LOG.info("ServerGUI start, local socket address: " + serverSocket.getLocalSocketAddress());
 
             while (true) {
                 try (Socket socket = serverSocket.accept()) {
