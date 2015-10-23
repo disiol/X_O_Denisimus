@@ -5,9 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -110,47 +108,7 @@ public class ServerGUI extends JFrame {
     }
 
 
-//    private void startServer() throws Exception {
-////        ServerGUI serverGUI = new ServerGUI();
-//
-//
-//        Integer portInt = new Integer(portField.getText());
-//        try (ServerSocket serverSocket = new ServerSocket(portInt, 0, InetAddress.getLocalHost())) {
-//            String address = serverSocket.getInetAddress().getHostAddress();
-//
-//
-//            socketAddressJLabel.setText("ServerGUI start, host address: " + address);
-//
-//
-//            LOG.info("ServerGUI start, local socket address: " + serverSocket.getLocalSocketAddress());
-//            System.out.println(enterTheNameOfPlayer1TextField.getText());
-//
-//
-//            startServerButton.setText("Exit");
-//            startServerButton.addActionListener((ActionEvent e) -> {
-//                System.exit(0);
-//            });
-//
-//
-//            Mainframe.pack();
-//
-//
-//            while (true) {
-//
-//                //TODO
-//                try (Socket socket = serverSocket.accept()) {
-//
-//
-//                    serverClient(socket);
-//
-//                }
-//            }
-//
-//        }
-//    }
-
-
-    private void startServer() {
+    private void startServer() throws IOException {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -206,16 +164,20 @@ public class ServerGUI extends JFrame {
 
 //TODO
         InputStream inputStream = socket.getInputStream();
+        DataInputStream dataInputStream = new DataInputStream(inputStream);
+
         OutputStream outputStream = socket.getOutputStream();
+        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+
 
         while (true) {
-            int regest = inputStream.read();
-            if (regest == -1) {
+            String regest = dataInputStream.readUTF();
+            if (regest == null) {
                 break;
             }
             LOG.info("Regest " + regest);
-            outputStream.write(regest * regest);
-            outputStream.flush();
+            dataOutputStream.writeUTF(regest);
+            dataOutputStream.flush();
         }
 
 

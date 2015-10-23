@@ -5,10 +5,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 /**
  * Author: Olenyk Denis (deoniisii@gmail.com)
@@ -18,7 +20,7 @@ import java.net.Socket;
 public class ClientGUI extends JFrame {
     JFrame Mainframe = new JFrame("ClientXO");
 
-    JLabel player1Label = new JLabel("Player2");
+    JLabel player2Label = new JLabel("Player2");
     JLabel portLabel = new JLabel("Hosts port:");
     JLabel ipHostLabel = new JLabel("IP host: ");
     JTextField ipHostTextField = new JTextField("");
@@ -29,7 +31,7 @@ public class ClientGUI extends JFrame {
     JTextField enterTheNameOfPlayer2TextField = new JTextField("enterTheNameOfPlayer2");
     JTextField portField = new JTextField("1111");
 
-    // private static final Logger LOG = Logger.getLogger(ServerGUI.class.getName());
+    private static final Logger LOG = Logger.getLogger(ClientGUI.class.getName());
 
     public ClientGUI() {
 
@@ -41,7 +43,7 @@ public class ClientGUI extends JFrame {
         Mainframe.setLocationRelativeTo(null);
         Mainframe.setResizable(false);
 
-        Mainframe.add(player1Label, new GridBagConstraints(0, 0, 1, 1, 1, 1,
+        Mainframe.add(player2Label, new GridBagConstraints(0, 0, 1, 1, 1, 1,
                 GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 2, 2, 2), 0, 0));
 
@@ -75,10 +77,13 @@ public class ClientGUI extends JFrame {
         Mainframe.pack();
 
         startButton.addActionListener((ActionEvent e) -> {
-            Mainframe.setVisible(false);
             try {
                 Client();
             } catch (Exception e1) {
+                socketAddressJLabel.setText(e1.toString());
+                Mainframe.pack();
+
+                LOG.info("Exception: " + e1);
                 e1.printStackTrace();
             }
 
@@ -91,11 +96,15 @@ public class ClientGUI extends JFrame {
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_ENTER:
-
-                        Mainframe.setVisible(false);
                         try {
                             Client();
                         } catch (Exception e1) {
+                            socketAddressJLabel.setText(e1.toString());
+                            Mainframe.pack();
+
+
+                            LOG.info("Exception: " + e1);
+
                             e1.printStackTrace();
                         }
 
@@ -112,23 +121,40 @@ public class ClientGUI extends JFrame {
 
 
     private void Client() throws Exception {
-        ClientGUI clientGUI = new ClientGUI();
 
 
-        Integer portInt = new Integer(clientGUI.portField.getText());
-        Integer ipInt = new Integer(clientGUI.ipHostTextField.getText());
+        Integer portInt = new Integer(portField.getText());
 
 
-        try (Socket socket = new Socket(String.valueOf(ipInt), portInt)) {
+        try (Socket socket = new Socket(ipHostTextField.getText(), portInt)) {
+            LOG.info("Client start: " + socket.getLocalSocketAddress());
 
 
-            OutputStream outputStream = socket.getOutputStream();
-            outputStream.write(5);
-            outputStream.flush();
+            OutputStream socketOutputStream = socket.getOutputStream();
+            DataOutputStream socketDataOutputStream = new DataOutputStream(socketOutputStream);
+            LOG.fine("SocketOutputStream: " + socketOutputStream);
+
+            socketDataOutputStream.writeUTF(enterTheNameOfPlayer2TextField.getText());
+            LOG.fine("SocketDataOutputStream: " + socketOutputStream);
+            socketOutputStream.flush();
+
             InputStream inputStream = socket.getInputStream();
-            int response = inputStream.read();
+            LOG.fine("InputStream: " + inputStream.toString());
 
-            clientGUI.socketAddressJLabel.setText(String.valueOf(response));
+            DataInputStream dataInputStream = new DataInputStream(inputStream);
+            LOG.fine("DataInputStream: " + dataInputStream.toString());
+
+
+            String response = dataInputStream.readUTF();
+
+            socketAddressJLabel.setText(response);
+
+
+            startButton.setText("Exit");
+            startButton.addActionListener((ActionEvent e) -> {
+                System.exit(0);
+            });
+            Mainframe.pack();
         }
 
     }
