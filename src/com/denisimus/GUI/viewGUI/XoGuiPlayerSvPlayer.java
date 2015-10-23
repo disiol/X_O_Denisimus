@@ -29,9 +29,9 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
     private final MoveControllerGUI moveControllerGUI = new MoveControllerGUI();
     JButton squares[];
     JButton newGameButton;
-    JLabel score = new JLabel("Puth the new game button");
-    JLabel player1Name = new JLabel("plaeyr1 Name");
-    JLabel player2Name = new JLabel("plaeyr 2Name");
+    JLabel score = new JLabel("Push the new game button");
+    JLabel player1NameLabel = new JLabel("player1 Name");
+    JLabel player2NameLabel = new JLabel("player2 Name");
 
 
     int noWinner = 0;
@@ -58,7 +58,7 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         JFrame frame = new JFrame("Game name: " + gameXO.getName());
         final Player[] plaeyrs = gameXO.getPlayers();
 
-        // Менеджер расположения апплета, шрифт и цвет
+        // Менеджер расположения , шрифт и цвет
         frame.setLayout(new BorderLayout());
         frame.setBackground(Color.WHITE);
         frame.setSize(530, 550);
@@ -69,16 +69,16 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         frame.setFont(font);
 
         // Кнопка “New Game” и слушатель действия
-        player1Name = new JLabel(plaeyrs[0].getName() + " : " + player1Win);
-        player2Name = new JLabel(plaeyrs[1].getName() + " : " + player2Win);
+        player1NameLabel = new JLabel(plaeyrs[0].getName() + " : " + player1Win);
+        player2NameLabel = new JLabel(plaeyrs[1].getName() + " : " + player2Win);
         newGameButton = new JButton("New game");
         newGameButton.addActionListener(this);
 
         Panel topPanel = new Panel();
         topPanel.setLayout(new BorderLayout());
         topPanel.add(newGameButton, "North");
-        topPanel.add(player1Name, "West");
-        topPanel.add(player2Name, "East");
+        topPanel.add(player1NameLabel, "West");
+        topPanel.add(player2NameLabel, "East");
         topPanel.add(noWinnerJLabel, "Center");
         frame.add(topPanel, "North");
         Panel centerPanel = new Panel();
@@ -241,13 +241,13 @@ public class XoGuiPlayerSvPlayer extends JFrame implements ActionListener {
         if (winnerFigure == Figure.X) {
             player1Win++;
             player[0].getName().toString();
-            player1Name.setText(player[0].getName().toString() + " : " + player1Win);
+            player1NameLabel.setText(player[0].getName().toString() + " : " + player1Win);
 
 
         }
         if (winnerFigure == Figure.O) {
             player2Win++;
-            player2Name.setText(player[1].getName().toString() + " : " + player2Win);
+            player2NameLabel.setText(player[1].getName().toString() + " : " + player2Win);
         }
 
         if (winnerFigure == null) {
