@@ -70,21 +70,33 @@ public class ServerGUI extends JFrame {
         Mainframe.pack();
 
         startServerButton.addActionListener((ActionEvent e) -> {
-            Mainframe.setVisible(false);
-            StartServerThreadGUI startServerThreadGUI = new StartServerThreadGUI();
+            // Mainframe.setVisible(false);
+            try {
+                startServer();
+            } catch (Exception e1) {
+                LOG.info("Exception: " + e1);
+
+                e1.printStackTrace();
+            }
 
 
         });
 
-        startServerButton.addKeyListener(new KeyAdapter() {
+        portField.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_ENTER:
 
-                        Mainframe.setVisible(false);
-                        StartServerThreadGUI startServerThreadGUI = new StartServerThreadGUI();
+                        try {
+                            startServer();
+                        } catch (Exception e1) {
+                            LOG.info("Exception: " + e1);
+
+                            e1.printStackTrace();
+                        }
+
 
                         break;
 
@@ -98,33 +110,94 @@ public class ServerGUI extends JFrame {
     }
 
 
-    private void startServer2() throws Exception {
+//    private void startServer() throws Exception {
+////        ServerGUI serverGUI = new ServerGUI();
+//
+//
+//        Integer portInt = new Integer(portField.getText());
+//        try (ServerSocket serverSocket = new ServerSocket(portInt, 0, InetAddress.getLocalHost())) {
+//            String address = serverSocket.getInetAddress().getHostAddress();
+//
+//
+//            socketAddressJLabel.setText("ServerGUI start, host address: " + address);
+//
+//
+//            LOG.info("ServerGUI start, local socket address: " + serverSocket.getLocalSocketAddress());
+//            System.out.println(enterTheNameOfPlayer1TextField.getText());
+//
+//
+//            startServerButton.setText("Exit");
+//            startServerButton.addActionListener((ActionEvent e) -> {
+//                System.exit(0);
+//            });
+//
+//
+//            Mainframe.pack();
+//
+//
+//            while (true) {
+//
+//                //TODO
+//                try (Socket socket = serverSocket.accept()) {
+//
+//
+//                    serverClient(socket);
+//
+//                }
+//            }
+//
+//        }
+//    }
 
 
-        Integer portInt = new Integer(portField.getText());
-        try (ServerSocket serverSocket = new ServerSocket(portInt, 0, InetAddress.getLocalHost())) {
-            String address = serverSocket.getInetAddress().getHostAddress();
+    private void startServer() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LOG.info("Tread startServer run");
 
 
-//TODO
-            System.out.println(enterTheNameOfPlayer1TextField.getText());
+                Integer portInt = new Integer(portField.getText());
+                try {
+                    try (ServerSocket serverSocket = new ServerSocket(portInt, 0, InetAddress.getLocalHost())) {
+                        String IP = serverSocket.getInetAddress().getHostAddress();
+                        int port = serverSocket.getLocalPort();
 
 
-            socketAddressJLabel.setText("ServerGUI start, host address: " + address);
+                        socketAddressJLabel.setText("ServerGUI start, host IP: " + IP + " , port: " + port);
 
 
-            LOG.info("ServerGUI start, local socket address: " + serverSocket.getLocalSocketAddress());
-
-            while (true) {
-                try (Socket socket = serverSocket.accept()) {
+                        LOG.info("ServerGUI start, local socket address: " + serverSocket.getLocalSocketAddress());
+                        System.out.println(enterTheNameOfPlayer1TextField.getText());
 
 
-                    serverClient(socket);
+                        startServerButton.setText("Exit");
+                        startServerButton.addActionListener((ActionEvent e) -> {
+                            System.exit(0);
+                        });
 
+
+                        Mainframe.pack();
+
+
+                        while (true) {
+
+                            //TODO
+                            try (Socket socket = serverSocket.accept()) {
+
+
+                                serverClient(socket);
+
+                            }
+                        }
+
+                    }
+                } catch (IOException e) {
+                    LOG.info("IOException: " + e);
+                    e.printStackTrace();
                 }
             }
-
-        }
+        }).start();
     }
 
 

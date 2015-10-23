@@ -7,6 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -20,7 +21,7 @@ public class ClientGUI extends JFrame {
     JLabel player1Label = new JLabel("Player2");
     JLabel portLabel = new JLabel("Hosts port:");
     JLabel ipHostLabel = new JLabel("IP host: ");
-    JTextField ipHostTextField = new JTextField();
+    JTextField ipHostTextField = new JTextField("");
 
     JButton startButton = new JButton("Start");
     JLabel socketAddressJLabel = new JLabel("ServerGUI not start");
@@ -75,7 +76,11 @@ public class ClientGUI extends JFrame {
 
         startButton.addActionListener((ActionEvent e) -> {
             Mainframe.setVisible(false);
-            StartServerThreadGUI startServerThreadGUI = new StartServerThreadGUI();
+            try {
+                Client();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
 
 
         });
@@ -88,7 +93,11 @@ public class ClientGUI extends JFrame {
                     case KeyEvent.VK_ENTER:
 
                         Mainframe.setVisible(false);
-                        StartServerThreadGUI startServerThreadGUI = new StartServerThreadGUI();
+                        try {
+                            Client();
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
 
                         break;
 
@@ -106,12 +115,11 @@ public class ClientGUI extends JFrame {
         ClientGUI clientGUI = new ClientGUI();
 
 
-        System.out.println("IP host");
-
         Integer portInt = new Integer(clientGUI.portField.getText());
-        String ip = clientGUI.ipHostTextField.getText();
+        Integer ipInt = new Integer(clientGUI.ipHostTextField.getText());
 
-        try (Socket socket = new Socket(ip, portInt)) {
+
+        try (Socket socket = new Socket(String.valueOf(ipInt), portInt)) {
 
 
             OutputStream outputStream = socket.getOutputStream();
@@ -120,7 +128,7 @@ public class ClientGUI extends JFrame {
             InputStream inputStream = socket.getInputStream();
             int response = inputStream.read();
 
-            System.out.println(response);
+            clientGUI.socketAddressJLabel.setText(String.valueOf(response));
         }
 
     }
