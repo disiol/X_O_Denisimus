@@ -19,14 +19,9 @@ public class Main {
     public static void main(String args[]) throws IOException {
 
         XOCLI xocli = new XOCLI();
-        String[] arg = args;
-
-        if (args.length > 0) {
-            arg[0] = arg[0];
-        } else arg = null;
 
 
-        if (arg == null) {
+        if (args.length == 0) {
             MainGUI mainGUI = new MainGUI();
 
 
@@ -36,7 +31,7 @@ public class Main {
         char what, choice, ignore;
 
 
-        if (arg[0].equals("--CLI") == true) {
+        if (args[0].equals("--CLI") == true) {
             //меню
             do {
                 System.out.println("select please the game mode:");
