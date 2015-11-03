@@ -1,8 +1,10 @@
 package com.denisimus.CLI.netCLI;
 
+import com.denisimus.CLI.modelCLI.Game;
 import com.denisimus.CLI.netCLI.netViewCLI.XONet;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -33,9 +35,14 @@ public class Server extends JFrame {
 
 
     private static String player1Name;
+    private static int player1 = 0;
+    private static int player2 = 1;
     private int serverSet;
     private int clientSet;
-    private boolean game;
+    private Game game;
+    private Point move;
+    private PrintWriter fromServerToClient;
+    private BufferedReader toServerFromClient;
 
 
     public Server() throws IOException {
@@ -98,25 +105,24 @@ public class Server extends JFrame {
     synchronized private void serverClient(Socket socket) throws IOException {
         LOG.info("Serving client " + socket.getInetAddress());
         XONet xoNet = new XONet();
+        ConsoleViewNet consoleViewNet = new ConsoleViewNet();
+
 
 //TODO
 
 
-        InputStream inputStream = socket.getInputStream();
-        DataInputStream dataInputStream = new DataInputStream(inputStream);
+        fromServerToClient = new PrintWriter(socket.getOutputStream(), true);
+        toServerFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        OutputStream outputStream = socket.getOutputStream();
-        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-
-        String player2Name = dataInputStream.readUTF();
+        String player2Name = toServerFromClient.readLine();
 //        if (player2Name == null) {
 //            break;
 //        }
         LOG.info("player2Name " + player2Name);
-        dataOutputStream.writeUTF(player1Name);
-        dataOutputStream.flush();
-        game = xoNet.setXONet(player1Name, player2Name, "Client XO");
-
+        fromServerToClient.println(player1Name);
+        fromServerToClient.flush();
+        game = xoNet.playersNamesAndFigure(player1Name, player2Name, "Client XO");
+        consoleViewNet.show(game);
 
 
         //game = xoNet.setXONet(player1Name, player2Name, "Server XO");
@@ -129,22 +135,19 @@ public class Server extends JFrame {
 //        }
 
 
-        while (game) {
+        consoleViewNet.show(game);
+        while (consoleViewNet.lucForWiner(game, game.getPlayers())) {
+            System.out.println();
+            move = consoleViewNet.move(game.getFiled(), game.getPlayers(), player1);
 
-            game = xoNet.setXONet(player1Name, player2Name, "Server XO");
-            // lookForWinner = lookForWinner(gameXO, players, clientSet);
-            LOG.info("clientSet: " + clientSet);
-
-            serverSet = 12;
-            dataOutputStream.write(serverSet);
-            outputStream.flush();
-            LOG.info("serverSet: " + serverSet);
-
+            consoleViewNet.show(game);
+            System.out.println();
+            break;
         }
 
-        outputStream.close();
-        dataInputStream.close();
-        socket.close();
+//        outputStream.close();
+//        dataInputStream.close();
+//        socket.close();
 
 
     }

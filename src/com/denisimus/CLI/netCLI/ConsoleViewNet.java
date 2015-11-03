@@ -39,7 +39,7 @@ public class ConsoleViewNet {
 
     }
 
-    public boolean move(final Game game, Player[] players) {
+    public boolean lucForWiner(final Game game, Player[] players) {
         final Filed filed = game.getFiled();
         final Figure winner = winnerController.getWinner(filed);
         if (winner != null) {
@@ -58,16 +58,32 @@ public class ConsoleViewNet {
             }
 
         }
-        System.out.printf("Player move: %s, figure: %s\nPlease enter move point \n", playerName(players, currentFigure), currentFigure);
+
+        return true;
+    }
+
+    protected Point move(Filed filed, Player[] players, int numberOfPlayer){
+        System.out.printf("Player move: %s, figure: %s\nPlease enter move point \n", players[numberOfPlayer].getName(),players[numberOfPlayer].getFigure());
         final Point point = askPoint();
         try {
-            moveController.applyFigure(filed, point, currentFigure);
+            moveController.applyFigure(filed, point, players[numberOfPlayer].getFigure());
+        } catch (final InvalidPointException | AlreadyOccupantException e) {
+            System.out.println("Point is invalid");
+        }
+       // return numberOfPlayer;
+        return point;
+    }
+
+    protected boolean moveAzerPlayer(Filed filed, Point point, Player[] players, int numberOfPlayer){
+
+        try {
+            moveController.applyFigure(filed, point, players[numberOfPlayer].getFigure());
         } catch (final InvalidPointException | AlreadyOccupantException e) {
             System.out.println("Point is invalid");
         }
         return true;
-    }
 
+    }
 
     private String playerName(Player[] players, Figure input) {
         final Player[] player = new Game(players, null, null).getPlayers();

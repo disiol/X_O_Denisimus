@@ -39,7 +39,7 @@ public class ConsoleViewNet {
 
     }
 
-    public boolean move(final Game game, Player[] players) {
+    public boolean cheacForViner(final Game game, Player[] players) {
         final Filed filed = game.getFiled();
         final Figure winner = winnerController.getWinner(filed);
         if (winner != null) {
@@ -58,6 +58,19 @@ public class ConsoleViewNet {
             }
 
         }
+       System.out.printf("Player move: %s, figure: %s\nPlease enter move point \n", playerName(players, currentFigure), currentFigure);
+//        final Point point = askPoint();
+//        try {
+//            moveController.applyFigure(filed, point, currentFigure);
+//        } catch (final InvalidPointException | AlreadyOccupantException e) {
+//            System.out.println("Point is invalid");
+//        }
+        return true;
+    }
+
+
+    protected void move(Player[] players, Figure currentFigure, Filed filed){
+
         System.out.printf("Player move: %s, figure: %s\nPlease enter move point \n", playerName(players, currentFigure), currentFigure);
         final Point point = askPoint();
         try {
@@ -65,7 +78,6 @@ public class ConsoleViewNet {
         } catch (final InvalidPointException | AlreadyOccupantException e) {
             System.out.println("Point is invalid");
         }
-        return true;
     }
 
 

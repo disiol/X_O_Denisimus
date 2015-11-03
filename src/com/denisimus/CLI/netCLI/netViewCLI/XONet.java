@@ -4,8 +4,6 @@ import com.denisimus.CLI.modelCLI.Figure;
 import com.denisimus.CLI.modelCLI.Filed;
 import com.denisimus.CLI.modelCLI.Game;
 import com.denisimus.CLI.modelCLI.Player;
-import com.denisimus.CLI.netCLI.ConsoleViewNet;
-import com.denisimus.CLI.viewCLI.ConsoleView;
 
 /**
  * Author: Olenyk Denis (deoniisii@gmail.com)
@@ -16,7 +14,7 @@ import com.denisimus.CLI.viewCLI.ConsoleView;
 public class XONet {
 
 
-    public boolean setXONet(String plaeyr1, String plaeyr2, String gameName) {
+    public Game playersNamesAndFigure(String plaeyr1, String plaeyr2, String gameName) {
         final String name1 = plaeyr1;
         final String name2 = plaeyr2;
 
@@ -32,19 +30,17 @@ public class XONet {
         System.out.printf("%s Figure: %s \n", players[1].getName(), players[1].getFigure());
         System.out.println();
 
+        return gameXO;
 
 
-            final ConsoleViewNet consoleViewNet = new ConsoleViewNet();
-            consoleViewNet.show(gameXO);
-            while (consoleViewNet.move(gameXO, players)) {
-                System.out.println();
-                consoleViewNet.show(gameXO);
-                System.out.println();
-            }
-
-
-
-        return false;
+//
+//            final ConsoleViewNet consoleViewNet = new ConsoleViewNet();
+//            consoleViewNet.show(gameXO);
+//            while (consoleViewNet.move(gameXO, players)) {
+//                System.out.println();
+//                consoleViewNet.show(gameXO);
+//                System.out.println();
+//            }
 
     }
 

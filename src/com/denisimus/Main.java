@@ -1,5 +1,6 @@
 package com.denisimus;
 
+import com.denisimus.CLI.netCLI.ServerOrClient;
 import com.denisimus.GUI.MainGUI;
 import com.denisimus.CLI.viewCLI.XOCLI;
 
@@ -28,7 +29,7 @@ public class Main {
         }
 
 
-        char what, choice, ignore;
+        char  choice, ignore;
 
 
         if (args[0].equals("--CLI") == true) {
@@ -76,6 +77,7 @@ public class Main {
 
                     break;
                 case '3':
+                    ServerOrClient serverOrClient = new ServerOrClient();
 
                     break;
                 case '4':

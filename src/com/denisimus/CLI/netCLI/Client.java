@@ -1,5 +1,6 @@
 package com.denisimus.CLI.netCLI;
 
+import com.denisimus.CLI.modelCLI.Game;
 import com.denisimus.CLI.netCLI.netViewCLI.XONet;
 
 import java.io.*;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
  */
 
 public class Client {
-    private boolean game;
+    private Game game;
     String nameOfProgram = new String("ClientXO");
 
     private static String player1Name;
@@ -27,6 +28,8 @@ public class Client {
     private static final Logger LOG = Logger.getLogger(Client.class.getName());
     private String hostIP;
     private int portNamber;
+    private PrintWriter fromClientToServer;
+    private BufferedReader toClientFromServer;
 
     public Client() {
         heder();
@@ -62,13 +65,14 @@ public class Client {
                     LOG.info("Client start: " + socket.getLocalSocketAddress());
 
                     XONet xoNet = new XONet();
+                    ConsoleViewNet consoleViewNet = new ConsoleViewNet();
 
-                    OutputStream outputStream = socket.getOutputStream();
-                    DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-                    LOG.fine("OutputStream: " + outputStream);
-                    dataOutputStream.writeUTF(player2Name);
-                    LOG.fine("OutputStream: " + outputStream);
-                    outputStream.flush();
+                    fromClientToServer = new PrintWriter(socket.getOutputStream(), true);
+                    toClientFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+                    fromClientToServer.println(player2Name);
+                    LOG.fine("OutputStream: " + fromClientToServer);
+                    fromClientToServer.flush();
 
                     InputStream inputStream = socket.getInputStream();
                     LOG.fine("inputStream: " + inputStream.toString());
@@ -76,16 +80,17 @@ public class Client {
                     LOG.fine("player1InputStream: " + player1NameDataInputStream.toString());
 
 
-                    player1Name = player1NameDataInputStream.readUTF();
+                    player1Name = toClientFromServer.readLine();
 
-                    game = xoNet.setXONet(player1Name, player2Name, "Client XO");
+                    game = xoNet.playersNamesAndFigure(player1Name, player2Name, "Client XO");
 
 
-                    while (game) {
-                        movePlayer1 = inputStream.read();
-                        System.out.println(movePlayer1);
-                        LOG.info("movePlayer1 " + movePlayer1);
-
+                    consoleViewNet.show(game);
+                    while (consoleViewNet.lucForWiner(game,game.getPlayers())) {
+                        System.out.println();
+                        consoleViewNet.show(game);
+                        System.out.println();
+                        break;
                     }
 
                     //TODO
