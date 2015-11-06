@@ -3,9 +3,14 @@ package com.denisimus.CLI.netCLI;
 import com.denisimus.CLI.modelCLI.Game;
 import com.denisimus.CLI.netCLI.netViewCLI.XONet;
 
-import java.io.*;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -24,12 +29,20 @@ public class Client {
     private int movePlayer1;
     private int movePlayer2;
 
+    private static int player1 = 0;
+    private static int player2 = 1;
 
     private static final Logger LOG = Logger.getLogger(Client.class.getName());
     private String hostIP;
     private int portNamber;
     private PrintWriter fromClientToServer;
     private BufferedReader toClientFromServer;
+    private boolean serverMove;
+    private boolean clientMove = false;
+    private boolean clientDataReady;
+    private boolean clientCanGo;
+    private Point move;
+    private boolean lucForWiner;
 
     public Client() {
         heder();
@@ -74,24 +87,122 @@ public class Client {
                     LOG.fine("OutputStream: " + fromClientToServer);
                     fromClientToServer.flush();
 
-                    InputStream inputStream = socket.getInputStream();
-                    LOG.fine("inputStream: " + inputStream.toString());
-                    DataInputStream player1NameDataInputStream = new DataInputStream(inputStream);
-                    LOG.fine("player1InputStream: " + player1NameDataInputStream.toString());
-
 
                     player1Name = toClientFromServer.readLine();
 
                     game = xoNet.playersNamesAndFigure(player1Name, player2Name, "Client XO");
-
-
                     consoleViewNet.show(game);
-                    while (consoleViewNet.lucForWiner(game,game.getPlayers())) {
-                        System.out.println();
-                        consoleViewNet.show(game);
-                        System.out.println();
-                        break;
+
+
+                    while (true) {
+                        try {
+
+                            String str;
+
+
+                            while ((str = toClientFromServer.readLine()) != null) {
+
+
+                                System.out.println("Client called from server...");
+
+
+                                //  System.out.println(str.length());
+
+
+                                // ставим в полученные координаты символ крестика
+                                consoleViewNet.moveAzerPlayer(game.getFiled(), new Point(), game.getPlayers(), player1);
+
+                                // перерисовываем доску
+                                consoleViewNet.show(game);
+
+                                // теперь мы ( клиент ) можем ходить
+                                clientCanGo = true;
+                                clientDataReady = true;
+
+                                break;
+                            }
+
+                            while (true) {
+
+
+                                if (clientDataReady) {
+
+                                    if (clientCanGo) {
+                                        move = consoleViewNet.move(game.getFiled(), game.getPlayers(), player2);
+                                        fromClientToServer.println(move);
+                                        consoleViewNet.show(game);
+                                        lucForWiner = consoleViewNet.lucForWiner(game, game.getPlayers());
+                                        clientCanGo = false;
+                                        System.out.println("Waiting for move of server");
+
+
+                                    }
+
+
+                                    System.out.println("Client: ready to send data!");
+
+//                                    String s = "";
+
+
+//                                    s = s.concat(" ");
+//                                    s = s.concat(String.valueOf(horStep));
+
+
+                                    LOG.info("Client set to server: " + move);
+
+                                    clientDataReady = false;
+
+
+                                    System.out.println("Client: data transported!");
+                                    break;
+
+                                } else {
+                                    // иначе - ждем, потом - все снова
+                                    try {
+                                        Thread.sleep(5);
+                                    } catch (InterruptedException ex) {
+                                    }
+                                }
+                            }
+
+
+                        } /////////
+                        catch (IOException ex) {
+                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+
                     }
+
+
+//                    clientMove = Boolean.parseBoolean(toClientFromServer.readLine());
+//                    while (clientMove) {
+//                        System.out.println();
+//                        String str;
+//
+//
+//                        while ((str = toClientFromServer.readLine()) != null) {
+//
+//
+//                            System.out.println("Client called from server...");
+//
+//
+//                            String[] words = str.split(" ");
+//
+//
+//                            int x = Integer.parseInt(words[0]);
+//                            int y = Integer.parseInt(words[1]);
+//
+//                            consoleViewNet.moveAzerPlayer(game.getFiled(),new Point(x,y), game.getPlayers(),movePlayer1);
+//                            consoleViewNet.show(game);
+//                            System.out.println();
+//                            clientMove = false;
+//                            serverMove = true;
+//                            break;
+//                        }
+
+//                        break;
+//                    }
 
                     //TODO
                 }

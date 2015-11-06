@@ -3,9 +3,11 @@ package com.denisimus.CLI.netCLI;
 import com.denisimus.CLI.modelCLI.Game;
 import com.denisimus.CLI.netCLI.netViewCLI.XONet;
 
-import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,7 +19,7 @@ import java.util.logging.Logger;
  * on 14.10.15.
  */
 
-public class Server extends JFrame {
+public class Server {
 
 
     String programTitle = new String("ServerXO");
@@ -43,6 +45,9 @@ public class Server extends JFrame {
     private Point move;
     private PrintWriter fromServerToClient;
     private BufferedReader toServerFromClient;
+    private boolean serverCanGo = true;
+    private boolean serverDataReady = true;
+    private boolean lucForWiner;
 
 
     public Server() throws IOException {
@@ -103,6 +108,8 @@ public class Server extends JFrame {
 
 
     synchronized private void serverClient(Socket socket) throws IOException {
+
+        LOG.info("Thread serverClient start ");
         LOG.info("Serving client " + socket.getInetAddress());
         XONet xoNet = new XONet();
         ConsoleViewNet consoleViewNet = new ConsoleViewNet();
@@ -111,10 +118,27 @@ public class Server extends JFrame {
 //TODO
 
 
-        fromServerToClient = new PrintWriter(socket.getOutputStream(), true);
-        toServerFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        try {
+            fromServerToClient = new PrintWriter(socket.getOutputStream(), true);
+        } catch (IOException e) {
+            LOG.info("IOException fromServerToClient " + e);
+            e.printStackTrace();
+        }
+        try {
+            toServerFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOG.info("IOException toServerFromClient " + e);
+        }
 
-        String player2Name = toServerFromClient.readLine();
+        String player2Name = null;
+        try {
+            player2Name = toServerFromClient.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOG.info("IOException player2Name " + e);
+
+        }
 //        if (player2Name == null) {
 //            break;
 //        }
@@ -123,6 +147,84 @@ public class Server extends JFrame {
         fromServerToClient.flush();
         game = xoNet.playersNamesAndFigure(player1Name, player2Name, "Client XO");
         consoleViewNet.show(game);
+
+
+        String inputLine;
+        Point outputLine;
+        while (true) {
+            try {
+
+                while (true) {
+
+
+                    if (serverDataReady) {
+
+                        System.out.println("Server: starting transmission...");
+
+                        if (serverCanGo) {
+                            move = consoleViewNet.move(game.getFiled(), game.getPlayers(), player1);
+                            consoleViewNet.show(game);
+                            System.out.println("Waiting for move of client");
+                            lucForWiner = consoleViewNet.lucForWiner(game, game.getPlayers());
+                            serverCanGo = false;
+                        }
+
+//                    outputLine = outputLine.concat(" ");
+//
+//                    outputLine = outputLine.concat(String.valueOf(horStep));
+                        fromServerToClient.println(move);
+                        LOG.info("Server set to client: " + move);
+
+
+                        serverDataReady = false;
+
+
+                        break;
+                    } else {
+
+                        try {
+                            Thread.sleep(5);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+
+
+                while ((inputLine = toServerFromClient.readLine()) != null) {
+
+
+                    LOG.info("Client say: " + inputLine);
+
+                    char[] point = inputLine.toCharArray();
+                    for (char i : point){
+
+                        System.out.print(i);
+                    }
+
+                    System.out.println(point.length);
+
+                    consoleViewNet.moveAzerPlayer(game.getFiled(), new Point(), game.getPlayers(), player2);
+
+
+                    consoleViewNet.show(game);
+
+
+                    serverCanGo = true;
+                    serverDataReady = true;
+
+                    break;
+                }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                LOG.info("inputLine: " + e);
+            }
+
+
+        }
 
 
         //game = xoNet.setXONet(player1Name, player2Name, "Server XO");
@@ -135,15 +237,21 @@ public class Server extends JFrame {
 //        }
 
 
-        consoleViewNet.show(game);
-        while (consoleViewNet.lucForWiner(game, game.getPlayers())) {
-            System.out.println();
-            move = consoleViewNet.move(game.getFiled(), game.getPlayers(), player1);
-
-            consoleViewNet.show(game);
-            System.out.println();
-            break;
-        }
+//        while (serverMove) {
+//            System.out.println();
+//            move = consoleViewNet.move(game.getFiled(), game.getPlayers(), player1);
+//            fromServerToClient.println(move);
+//            consoleViewNet.show(game);
+//            System.out.println();
+//            consoleViewNet.lucForWiner(game, game.getPlayers());
+//            serverMove = false;
+//            clientMove = true;
+//            fromServerToClient.println(clientMove);
+//
+//
+//
+//            break;
+//        }
 
 //        outputStream.close();
 //        dataInputStream.close();
