@@ -45,6 +45,8 @@ public class Server {
     private boolean serverCanGo = true;
     private boolean serverDataReady = true;
     private boolean lucForWiner;
+    XONet xoNet = new XONet();
+    ConsoleViewNet consoleViewNet = new ConsoleViewNet();
 
 
     public Server() throws IOException {
@@ -112,8 +114,6 @@ public class Server {
 
         LOG.info("Thread serverClient start ");
         LOG.info("Serving client " + socket.getInetAddress());
-        XONet xoNet = new XONet();
-        ConsoleViewNet consoleViewNet = new ConsoleViewNet();
 
 
 //TODO
@@ -167,25 +167,33 @@ public class Server {
 
 
                         if (serverCanGo) {
+
+                            //TODO
+
                             move = consoleViewNet.move(game.getFiled(), game.getPlayers(), player1);
 
 
-
-                            consoleViewNet.show(game);
-                            System.out.println("Waiting for move of client");
                             lucForWiner = consoleViewNet.lucForWiner(game, game.getPlayers());
+
                             serverCanGo = false;
+
+
                         }
 
-//
-//                        outputLine = outputLine.concat(String.valueOf(move.x));
-//                        outputLine = outputLine.concat(" ");
-//                        outputLine = outputLine.concat(String.valueOf(move.y));
                         LOG.info("Server set to client: " + move);
                         moveSerial.writeObject(move);
                         fromServerToClient.println(moveFile);
                         moveSerial.flush();
                         moveSerial.close();
+
+                        if (lucForWiner) {
+                            consoleViewNet.show(game);
+                            System.out.println("Waiting for move of client");
+                            serverCanGo = false;
+                        } else if (!lucForWiner) {
+                            consoleViewNet.show(game);
+                            System.exit(-1);
+                        }
 
                         serverDataReady = false;
 
@@ -213,15 +221,18 @@ public class Server {
                     Point point = (Point) oin.readObject();
 
 
-
                     consoleViewNet.moveAzerPlayer(game.getFiled(), point, game.getPlayers(), player2);
 
 
                     consoleViewNet.show(game);
 
-
-                    serverCanGo = true;
-                    serverDataReady = true;
+                    if (lucForWiner) {
+                        serverCanGo = true;
+                        serverDataReady = true;
+                    } else if (!lucForWiner) {
+                        consoleViewNet.show(game);
+                        System.exit(-1);
+                    }
 
                     break;
                 }
@@ -236,41 +247,7 @@ public class Server {
         }
 
 
-        //game = xoNet.setXONet(player1Name, player2Name, "Server XO");
-
-
-//        if (player1Name != null && player2Name != null){
-//
-//            OutputStream outputStream = socket.getOutputStream();
-//
-//        }
-
-
-//        while (serverMove) {
-//            System.out.println();
-//            move = consoleViewNet.move(game.getFiled(), game.getPlayers(), player1);
-//            fromServerToClient.println(move);
-//            consoleViewNet.show(game);
-//            System.out.println();
-//            consoleViewNet.lucForWiner(game, game.getPlayers());
-//            serverMove = false;
-//            clientMove = true;
-//            fromServerToClient.println(clientMove);
-//
-//
-//
-//            break;
-//        }
-
-//        outputStream.close();
-//        dataInputStream.close();
-//        socket.close();
-
-
     }
-
-
-//
 
 
 }

@@ -89,6 +89,7 @@ public class Client {
 
                     game = xoNet.playersNamesAndFigure(player1Name, player2Name, "Client XO");
                     consoleViewNet.show(game);
+                    System.out.println("Waiting for move of server");
 
 
                     while (true) {
@@ -107,20 +108,20 @@ public class Client {
                                 ObjectInputStream oin = new ObjectInputStream(fis);
                                 Point point = (Point) oin.readObject();
 
+//TODO
+                                consoleViewNet.moveAzerPlayer(game.getFiled(), point, game.getPlayers(), player1);
+
+                                lucForWiner = consoleViewNet.lucForWiner(game, game.getPlayers());
 
 
-                                //  System.out.println(str.length());
-
-
-                                // ставим в полученные координаты символ крестика
-                                consoleViewNet.moveAzerPlayer(game.getFiled(),point, game.getPlayers(), player1);
-
-                                // перерисовываем доску
-                                consoleViewNet.show(game);
-
-                                // теперь мы ( клиент ) можем ходить
-                                clientCanGo = true;
-                                clientDataReady = true;
+                                if (lucForWiner) {
+                                    consoleViewNet.show(game);
+                                    clientCanGo = true;
+                                    clientDataReady = true;
+                                } else if (!lucForWiner) {
+                                    consoleViewNet.show(game);
+                                    System.exit(-1);
+                                }
 
                                 break;
                             }
@@ -136,23 +137,17 @@ public class Client {
 
                                     if (clientCanGo) {
                                         move = consoleViewNet.move(game.getFiled(), game.getPlayers(), player2);
-
-                                        consoleViewNet.show(game);
-                                        System.out.println("Waiting for move of server");
                                         lucForWiner = consoleViewNet.lucForWiner(game, game.getPlayers());
+                                        consoleViewNet.show(game);
+
                                         clientCanGo = false;
 
 
                                     }
 
 
-
                                     System.out.println("Client: ready to send data!");
 
-//
-//                                    outputLine = outputLine.concat(String.valueOf(move.x));
-//                                    outputLine = outputLine.concat(" ");
-//                                    outputLine = outputLine.concat(String.valueOf(move.y));
                                     LOG.info("Server set to client: " + move);
 
                                     moveSerial.writeObject(move);
@@ -165,8 +160,15 @@ public class Client {
 
                                     clientDataReady = false;
 
-
                                     System.out.println("Client: data transported!");
+
+                                    if (!lucForWiner) {
+                                        consoleViewNet.show(game);
+                                        System.exit(-1);
+                                    } else if (lucForWiner) {
+                                        System.out.println("Waiting for move of server");
+                                    }
+
                                     break;
 
                                 } else {
@@ -191,37 +193,6 @@ public class Client {
 
                     }
 
-
-//                    clientMove = Boolean.parseBoolean(toClientFromServer.readLine());
-//                    while (clientMove) {
-//                        System.out.println();
-//                        String str;
-//
-//
-//                        while ((str = toClientFromServer.readLine()) != null) {
-//
-//
-//                            System.out.println("Client called from server...");
-//
-//
-//                            String[] words = str.split(" ");
-//
-//
-//                            int x = Integer.parseInt(words[0]);
-//                            int y = Integer.parseInt(words[1]);
-//
-//                            consoleViewNet.moveAzerPlayer(game.getFiled(),new Point(x,y), game.getPlayers(),movePlayer1);
-//                            consoleViewNet.show(game);
-//                            System.out.println();
-//                            clientMove = false;
-//                            serverMove = true;
-//                            break;
-//                        }
-
-//                        break;
-//                    }
-
-                    //TODO
                 }
             } catch (IOException e) {
                 e.printStackTrace();

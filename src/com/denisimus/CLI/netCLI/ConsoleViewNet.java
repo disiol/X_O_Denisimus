@@ -63,12 +63,14 @@ public class ConsoleViewNet {
     }
 
     protected Point move(Filed filed, Player[] players, int numberOfPlayer){
+
         System.out.printf("Player move: %s, figure: %s\nPlease enter move point \n", players[numberOfPlayer].getName(),players[numberOfPlayer].getFigure());
-        final Point point = askPoint();
+         Point point = askPoint();
         try {
             moveController.applyFigure(filed, point, players[numberOfPlayer].getFigure());
         } catch (final InvalidPointException | AlreadyOccupantException e) {
             System.out.println("Point is invalid");
+          return move(filed,players,numberOfPlayer);
         }
        // return numberOfPlayer;
         return point;
