@@ -60,11 +60,7 @@ public class Client {
 
     }
 
-//    private void status() {
-//        heder();
-//        System.out.println("Port: " + portNamber);
-//        System.out.println("Status server:" + statusServer);
-//    }
+
 
     private void statClient() {
         new Thread(() -> {
