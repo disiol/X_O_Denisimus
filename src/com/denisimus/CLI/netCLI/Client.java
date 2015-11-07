@@ -4,10 +4,7 @@ import com.denisimus.CLI.modelCLI.Game;
 import com.denisimus.CLI.netCLI.netViewCLI.XONet;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -102,15 +99,21 @@ public class Client {
 
                             while ((str = toClientFromServer.readLine()) != null) {
 
-
+                                LOG.info("toClientFromServer:" + str);
                                 System.out.println("Client called from server...");
+
+
+                                FileInputStream fis = new FileInputStream("move.out");
+                                ObjectInputStream oin = new ObjectInputStream(fis);
+                                Point point = (Point) oin.readObject();
+
 
 
                                 //  System.out.println(str.length());
 
 
                                 // ставим в полученные координаты символ крестика
-                                consoleViewNet.moveAzerPlayer(game.getFiled(), new Point(), game.getPlayers(), player1);
+                                consoleViewNet.moveAzerPlayer(game.getFiled(),point, game.getPlayers(), player1);
 
                                 // перерисовываем доску
                                 consoleViewNet.show(game);
@@ -127,25 +130,35 @@ public class Client {
 
                                 if (clientDataReady) {
 
+                                    FileOutputStream moveFile = new FileOutputStream("move.out");
+                                    ObjectOutputStream moveSerial = new ObjectOutputStream(moveFile);
+
+
                                     if (clientCanGo) {
                                         move = consoleViewNet.move(game.getFiled(), game.getPlayers(), player2);
-                                        fromClientToServer.println(move);
+
                                         consoleViewNet.show(game);
+                                        System.out.println("Waiting for move of server");
                                         lucForWiner = consoleViewNet.lucForWiner(game, game.getPlayers());
                                         clientCanGo = false;
-                                        System.out.println("Waiting for move of server");
 
 
                                     }
 
 
+
                                     System.out.println("Client: ready to send data!");
 
-//                                    String s = "";
+//
+//                                    outputLine = outputLine.concat(String.valueOf(move.x));
+//                                    outputLine = outputLine.concat(" ");
+//                                    outputLine = outputLine.concat(String.valueOf(move.y));
+                                    LOG.info("Server set to client: " + move);
 
-
-//                                    s = s.concat(" ");
-//                                    s = s.concat(String.valueOf(horStep));
+                                    moveSerial.writeObject(move);
+                                    fromClientToServer.println(moveFile);
+                                    moveSerial.flush();
+                                    moveSerial.close();
 
 
                                     LOG.info("Client set to server: " + move);
@@ -161,6 +174,7 @@ public class Client {
                                     try {
                                         Thread.sleep(5);
                                     } catch (InterruptedException ex) {
+                                        LOG.info("InterruptedException:" + ex);
                                     }
                                 }
                             }
@@ -169,6 +183,9 @@ public class Client {
                         } /////////
                         catch (IOException ex) {
                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                            System.exit(-1);
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
                         }
 
 
