@@ -4,10 +4,7 @@ import com.denisimus.CLI.modelCLI.Game;
 import com.denisimus.CLI.netCLI.netViewCLI.XONet;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -93,7 +90,11 @@ public class Server {
                         try (Socket socket = serverSocket.accept()) {
 
 
-                            serverClient(socket);
+                            try {
+                                serverClient(socket);
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
 
                         }
                     }
@@ -107,7 +108,7 @@ public class Server {
     }
 
 
-    synchronized private void serverClient(Socket socket) throws IOException {
+    synchronized private void serverClient(Socket socket) throws IOException, ClassNotFoundException {
 
         LOG.info("Thread serverClient start ");
         LOG.info("Serving client " + socket.getInetAddress());
@@ -150,7 +151,7 @@ public class Server {
 
 
         String inputLine;
-        Point outputLine;
+        String outputLine = null;
         while (true) {
             try {
 
@@ -161,20 +162,30 @@ public class Server {
 
                         System.out.println("Server: starting transmission...");
 
+                        FileOutputStream moveFile = new FileOutputStream("move.out");
+                        ObjectOutputStream moveSerial = new ObjectOutputStream(moveFile);
+
+
                         if (serverCanGo) {
                             move = consoleViewNet.move(game.getFiled(), game.getPlayers(), player1);
+
+
+
                             consoleViewNet.show(game);
                             System.out.println("Waiting for move of client");
                             lucForWiner = consoleViewNet.lucForWiner(game, game.getPlayers());
                             serverCanGo = false;
                         }
 
-//                    outputLine = outputLine.concat(" ");
 //
-//                    outputLine = outputLine.concat(String.valueOf(horStep));
-                        fromServerToClient.println(move);
+//                        outputLine = outputLine.concat(String.valueOf(move.x));
+//                        outputLine = outputLine.concat(" ");
+//                        outputLine = outputLine.concat(String.valueOf(move.y));
                         LOG.info("Server set to client: " + move);
-
+                        moveSerial.writeObject(move);
+                        fromServerToClient.println(moveFile);
+                        moveSerial.flush();
+                        moveSerial.close();
 
                         serverDataReady = false;
 
@@ -197,15 +208,13 @@ public class Server {
 
                     LOG.info("Client say: " + inputLine);
 
-                    char[] point = inputLine.toCharArray();
-                    for (char i : point){
+                    FileInputStream fis = new FileInputStream("move.out");
+                    ObjectInputStream oin = new ObjectInputStream(fis);
+                    Point point = (Point) oin.readObject();
 
-                        System.out.print(i);
-                    }
 
-                    System.out.println(point.length);
 
-                    consoleViewNet.moveAzerPlayer(game.getFiled(), new Point(), game.getPlayers(), player2);
+                    consoleViewNet.moveAzerPlayer(game.getFiled(), point, game.getPlayers(), player2);
 
 
                     consoleViewNet.show(game);
