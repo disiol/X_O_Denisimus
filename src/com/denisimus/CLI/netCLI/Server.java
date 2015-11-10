@@ -116,8 +116,6 @@ public class Server {
         LOG.info("Serving client " + socket.getInetAddress());
 
 
-//TODO
-
 
         try {
             fromServerToClient = new PrintWriter(socket.getOutputStream(), true);
@@ -146,12 +144,11 @@ public class Server {
         LOG.info("player2Name " + player2Name);
         fromServerToClient.println(player1Name);
         fromServerToClient.flush();
-        game = xoNet.playersNamesAndFigure(player1Name, player2Name, "Client XO");
+        xoNet.playersNamesAndFigure(player1Name, player2Name, "Server XO");
         consoleViewNet.show(game);
 
 
         String inputLine;
-        String outputLine = null;
         while (true) {
             try {
 
@@ -168,7 +165,6 @@ public class Server {
 
                         if (serverCanGo) {
 
-                            //TODO
 
                             move = consoleViewNet.move(game.getFiled(), game.getPlayers(), player1);
 
