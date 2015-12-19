@@ -34,8 +34,6 @@ public class Main {
 
         char what, choice, ignore;
 
-
-        if (arg[0].equals("--CLI") == true) {
             //меню
             do {
                 System.out.println("select please the game mode:");
@@ -89,7 +87,7 @@ public class Main {
             }
 
 
-        }
+
 
 
     }
