@@ -1,8 +1,7 @@
 package com.denisimus;
 
-import com.denisimus.CLI.netCLI.ServerOrClient;
+
 import com.denisimus.CLI.viewCLI.XOCLI;
-import com.denisimus.GUI.MainGUI;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -13,23 +12,30 @@ import java.util.Scanner;
  * Главное меню
  * <p>
  * --CLI -консольный режим
- *
- * @version 1.1
  */
 
 public class Main {
     public static void main(String args[]) throws IOException {
 
-        char choice, ignore;
-
         XOCLI xocli = new XOCLI();
+        String[] arg = args;
+
+        if (args.length > 0) {
+            arg[0] = arg[0];
+        } else arg = null;
 
 
-        if (args.length == 0) {
+       /* if (arg == null) {
             MainGUI mainGUI = new MainGUI();
 
 
-        }else if (args[0].equals("--CLI") == true) {
+        }*/
+
+
+        char what, choice, ignore;
+
+
+        if (arg[0].equals("--CLI") == true) {
             //меню
             do {
                 System.out.println("select please the game mode:");
@@ -74,7 +80,6 @@ public class Main {
 
                     break;
                 case '3':
-                    ServerOrClient serverOrClient = new ServerOrClient();
 
                     break;
                 case '4':
